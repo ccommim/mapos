@@ -184,13 +184,11 @@ function validarCNPJ(cnpj) {
     }
 
     // CNPJ alfanumérico
-    if (/^[A-Z0-9]{12}\d{2}$/.test(cnpj)) {
-        let base = cnpj.substring(0, 12);
-        let dv = cnpj.substring(12, 14);
-        const calculado = calcularDVAlfanumerico(base);
-        const valido = calculado === dv;
-        return false;
+    if (/^[A-Z0-9]{14}$/.test(cnpj) && /[A-Z]/.test(cnpj)) {
+        return true;
     }
+
+    return false;
 }
     //finaliza a validação do CNPJ
 

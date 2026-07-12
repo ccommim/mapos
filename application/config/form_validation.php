@@ -57,6 +57,11 @@ $config = [
             'label' => 'CEP',
             'rules' => 'trim',
         ],
+        [
+            'field' => 'observacoes',
+            'label' => 'Observações',
+            'rules' => 'trim',
+        ],
     ],
     'servicos' => [
         [

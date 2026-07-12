@@ -62,6 +62,46 @@
         font-weight: 500;
     }
 
+    .observacoes-full {
+        clear: both;
+        padding: 0 20px 20px 0;
+        margin: 0;
+    }
+
+    .observacoes-full .control-group {
+        border-bottom: 0;
+        margin: 0;
+    }
+
+    .observacoes-full .control-label {
+        float: none;
+        width: auto;
+        margin-left: 0;
+        padding-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .observacoes-full .controls {
+        margin-left: 0;
+    }
+
+    .observacoes-full textarea {
+        width: calc(100% - 20px);
+        max-width: 100%;
+        min-height: 160px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+
+    #formCliente input[type="text"],
+    #formCliente textarea {
+        text-transform: uppercase;
+    }
+
+    #formCliente input[type="text"][name="email"] {
+        text-transform: lowercase;
+    }
+
     @media (max-width: 480px) {
         form {
             display: contents !important;
@@ -136,15 +176,7 @@
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Tipo de Cliente</label>
-                            <div class="controls">
-                                <label for="fornecedor" class="btn btn-default">Fornecedor
-                                    <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="1" <?= ($result->fornecedor == 1) ? 'checked' : '' ?>>
-                                    <span class="badge">&check;</span>
-                                </label>
-                            </div>
-                        </div>
+                        <input type="hidden" id="fornecedor" name="fornecedor" value="<?php echo $result->fornecedor; ?>">
                     </div>
 
                     <div class="span6">
@@ -188,8 +220,16 @@
                             <label for="estado" class="control-label">Estado</label>
                             <div class="controls">
                                 <select id="estado" name="estado" class="">
-                                    <option value="">Selecione...</option>
+                                    <option value="">SELECIONE...</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="observacoes-full">
+                        <div class="control-group">
+                            <label for="observacoes" class="control-label">Observações</label>
+                            <div class="controls">
+                                <textarea id="observacoes" name="observacoes"><?php echo $result->cust_observacoes; ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -214,6 +254,15 @@
         let input = document.querySelector('#senha');
         let icon = document.querySelector('#imgSenha');
 
+        $('#formCliente').on('input', 'input[type="text"], textarea', function() {
+            if (this.name === 'email') {
+                this.value = this.value.toLowerCase();
+                return;
+            }
+
+            this.value = this.value.toUpperCase();
+        });
+
         icon.addEventListener('click', function() {
             container.classList.toggle('visible');
             if (container.classList.contains('visible')) {
@@ -227,11 +276,13 @@
 
         $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
-                $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
+                $('#estado').append(new Option(data.estados[i].nome.toUpperCase(), data.estados[i].sigla.toUpperCase()));
             }
             var curState = '<?php echo $result->estado; ?>';
             if (curState) {
                 $("#estado option[value=" + curState + "]").prop("selected", true);
+            } else {
+                $("#estado option[value=MG]").prop("selected", true);
             }
 
         });

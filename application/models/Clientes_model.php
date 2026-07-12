@@ -83,6 +83,36 @@ class Clientes_model extends CI_Model
     }
 
     /**
+     * Retorna as OS do cliente com os servicos vinculados para exibicao na aba de visualizacao.
+     *
+     * @param  int  $id
+     * @return array
+     */
+    public function getOsDetailsByCliente($id)
+    {
+        $os = $this->getOsByCliente($id);
+
+        if (empty($os)) {
+            return [];
+        }
+
+        $osIds = array_map(static function ($item) {
+            return (int) $item->idOs;
+        }, $os);
+
+        $this->db->select('os.idOs, os.dataInicial, os.dataFinal, COALESCE(os.dataFinal, os.dataInicial) as dataExecucao, os.observacoes, servicos_os.quantidade, servicos_os.preco, servicos_os.subTotal, servicos_os.servico, servicos.nome as nomeServico, servicos.preco as precoPadraoServico', false);
+        $this->db->from('os');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos', 'servicos.idServicos = servicos_os.servicos_id', 'left');
+        $this->db->where_in('os.idOs', $osIds);
+        $this->db->order_by('COALESCE(os.dataFinal, os.dataInicial)', 'desc', false);
+        $this->db->order_by('os.idOs', 'desc');
+        $this->db->order_by('servicos_os.idServicos_os', 'asc');
+
+        return $this->db->get()->result();
+    }
+
+    /**
      * Retorna todas as OS vinculados ao cliente
      *
      * @param  int  $id

@@ -69,26 +69,27 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $email = set_value('email');
+            $email = $this->normalizeEmail(set_value('email'));
             if ($email && $this->clientes_model->emailExists($email)) {
                 $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
             } else {
                 $data = [
-                'nomeCliente' => set_value('nomeCliente'),
-                'contato' => set_value('contato'),
+                'nomeCliente' => $this->normalizeUppercase(set_value('nomeCliente')),
+                'contato' => $this->normalizeUppercase(set_value('contato')),
                 'pessoa_fisica' => $pessoa_fisica,
-                'documento' => set_value('documento'),
-                'telefone' => set_value('telefone'),
-                'celular' => set_value('celular'),
-                'email' => set_value('email'),
+                'documento' => $this->normalizeUppercase(set_value('documento')),
+                'telefone' => $this->normalizeUppercase(set_value('telefone')),
+                'celular' => $this->normalizeUppercase(set_value('celular')),
+                'email' => $email,
                 'senha' => password_hash($senhaCliente, PASSWORD_DEFAULT),
-                'rua' => set_value('rua'),
-                'numero' => set_value('numero'),
-                'complemento' => set_value('complemento'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'estado' => set_value('estado'),
-                'cep' => set_value('cep'),
+                'rua' => $this->normalizeUppercase(set_value('rua')),
+                'numero' => $this->normalizeUppercase(set_value('numero')),
+                'complemento' => $this->normalizeUppercase(set_value('complemento')),
+                'bairro' => $this->normalizeUppercase(set_value('bairro')),
+                'cidade' => $this->normalizeUppercase(set_value('cidade')),
+                'estado' => $this->normalizeUppercase(set_value('estado')),
+                'cep' => $this->normalizeUppercase(set_value('cep')),
+                'cust_observacoes' => $this->normalizeUppercase(set_value('observacoes')),
                 'dataCadastro' => date('Y-m-d'),
                 'fornecedor' => $this->input->post('fornecedor') ? 1 : 0,
             ];
@@ -127,7 +128,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             
-            $email = $this->input->post('email');
+            $email = $this->normalizeEmail($this->input->post('email'));
             $idCliente = $this->input->post('idClientes');
             if ($email && $this->clientes_model->emailExists($email, $idCliente)) {
                 $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
@@ -137,37 +138,39 @@ class Clientes extends MY_Controller
                     $senha = password_hash($senha, PASSWORD_DEFAULT);
 
                     $data = [
-                        'nomeCliente' => $this->input->post('nomeCliente'),
-                        'contato' => $this->input->post('contato'),
-                        'documento' => $this->input->post('documento'),
-                        'telefone' => $this->input->post('telefone'),
-                        'celular' => $this->input->post('celular'),
-                        'email' => $this->input->post('email'),
+                        'nomeCliente' => $this->normalizeUppercase($this->input->post('nomeCliente')),
+                        'contato' => $this->normalizeUppercase($this->input->post('contato')),
+                        'documento' => $this->normalizeUppercase($this->input->post('documento')),
+                        'telefone' => $this->normalizeUppercase($this->input->post('telefone')),
+                        'celular' => $this->normalizeUppercase($this->input->post('celular')),
+                        'email' => $email,
                         'senha' => $senha,
-                        'rua' => $this->input->post('rua'),
-                        'numero' => $this->input->post('numero'),
-                        'complemento' => $this->input->post('complemento'),
-                        'bairro' => $this->input->post('bairro'),
-                        'cidade' => $this->input->post('cidade'),
-                        'estado' => $this->input->post('estado'),
-                        'cep' => $this->input->post('cep'),
+                        'rua' => $this->normalizeUppercase($this->input->post('rua')),
+                        'numero' => $this->normalizeUppercase($this->input->post('numero')),
+                        'complemento' => $this->normalizeUppercase($this->input->post('complemento')),
+                        'bairro' => $this->normalizeUppercase($this->input->post('bairro')),
+                        'cidade' => $this->normalizeUppercase($this->input->post('cidade')),
+                        'estado' => $this->normalizeUppercase($this->input->post('estado')),
+                        'cep' => $this->normalizeUppercase($this->input->post('cep')),
+                        'cust_observacoes' => $this->normalizeUppercase($this->input->post('observacoes')),
                         'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
                     ];
                 } else {
                     $data = [
-                        'nomeCliente' => $this->input->post('nomeCliente'),
-                        'contato' => $this->input->post('contato'),
-                        'documento' => $this->input->post('documento'),
-                        'telefone' => $this->input->post('telefone'),
-                        'celular' => $this->input->post('celular'),
-                        'email' => $this->input->post('email'),
-                        'rua' => $this->input->post('rua'),
-                        'numero' => $this->input->post('numero'),
-                        'complemento' => $this->input->post('complemento'),
-                        'bairro' => $this->input->post('bairro'),
-                        'cidade' => $this->input->post('cidade'),
-                        'estado' => $this->input->post('estado'),
-                        'cep' => $this->input->post('cep'),
+                        'nomeCliente' => $this->normalizeUppercase($this->input->post('nomeCliente')),
+                        'contato' => $this->normalizeUppercase($this->input->post('contato')),
+                        'documento' => $this->normalizeUppercase($this->input->post('documento')),
+                        'telefone' => $this->normalizeUppercase($this->input->post('telefone')),
+                        'celular' => $this->normalizeUppercase($this->input->post('celular')),
+                        'email' => $email,
+                        'rua' => $this->normalizeUppercase($this->input->post('rua')),
+                        'numero' => $this->normalizeUppercase($this->input->post('numero')),
+                        'complemento' => $this->normalizeUppercase($this->input->post('complemento')),
+                        'bairro' => $this->normalizeUppercase($this->input->post('bairro')),
+                        'cidade' => $this->normalizeUppercase($this->input->post('cidade')),
+                        'estado' => $this->normalizeUppercase($this->input->post('estado')),
+                        'cep' => $this->normalizeUppercase($this->input->post('cep')),
+                        'cust_observacoes' => $this->normalizeUppercase($this->input->post('observacoes')),
                         'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
                     ];
                 }
@@ -188,6 +191,22 @@ class Clientes extends MY_Controller
         return $this->layout();
     }
 
+    private function normalizeUppercase($value)
+    {
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return $value;
+        }
+
+        return function_exists('mb_strtoupper') ? mb_strtoupper($value, 'UTF-8') : strtoupper($value);
+    }
+
+    private function normalizeEmail($value)
+    {
+        return strtolower(trim((string) $value));
+    }
+
     public function visualizar()
     {
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
@@ -202,7 +221,7 @@ class Clientes extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
+        $this->data['results'] = $this->clientes_model->getOsDetailsByCliente($this->uri->segment(3));
         $this->data['result_vendas'] = $this->clientes_model->getAllVendasByClient($this->uri->segment(3));
         $this->data['view'] = 'clientes/visualizar';
 
