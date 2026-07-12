@@ -27,6 +27,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Ajustadas telas de usuários (configurações, adicionar e editar) para permitir Login e E-mail opcionais individualmente, exigindo ao menos um dos dois campos preenchido.
 - Ajustada listagem de usuários para exibir colunas de Login e E-mail e remover CPF e Telefone.
 - Padronizada persistência do campo `cust_login` no cadastro/edição de usuários.
+- Simplificada migration de usuários para apenas adicionar a coluna `cust_login` quando ausente (sem renomear coluna legada e sem preenchimento automático).
 
 ### Fixed
 - Corrigida busca de CNPJ alfanumérico para não exibir erro de documento inválido em cenários suportados.
