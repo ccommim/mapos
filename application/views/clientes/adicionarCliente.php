@@ -38,25 +38,26 @@
 
     .form-horizontal .control-group {
         border-bottom: 1px solid #ffffff;
+        margin-bottom: 0;
     }
 
     .form-horizontal .controls {
-        margin-left: 20px;
-        padding-bottom: 8px 0;
+        margin-left: 12px;
+        padding-bottom: 0;
     }
 
     .form-horizontal .control-label {
         text-align: left;
-        padding-top: 15px;
+        padding-top: 0;
     }
 
     .nopadding {
-        padding: 0 20px !important;
-        margin-right: 20px;
+        padding: 0 12px !important;
+        margin-right: 12px;
     }
 
     .widget-title h5 {
-        padding-bottom: 30px;
+        padding-bottom: 8px;
         text-align-last: left;
         font-size: 2em;
         font-weight: 500;
@@ -64,7 +65,7 @@
 
     .observacoes-full {
         clear: both;
-        padding: 0 20px 20px 0;
+        padding: 0 12px 20px 0;
         margin: 0;
     }
 
@@ -78,7 +79,7 @@
         width: auto;
         margin-left: 0;
         padding-top: 0;
-        margin-bottom: 8px;
+        margin-bottom: 2px;
     }
 
     .observacoes-full .controls {
@@ -86,11 +87,21 @@
     }
 
     .observacoes-full textarea {
-        width: calc(100% - 20px);
+        width: calc(100% - 12px);
         max-width: 100%;
         min-height: 160px;
         box-sizing: border-box;
         resize: vertical;
+    }
+
+    #formCliente input[type="text"],
+    #formCliente input[type="password"],
+    #formCliente select,
+    #formCliente textarea,
+    #formCliente button,
+    #formCliente img,
+    #formCliente .help-inline {
+        margin-bottom: 0;
     }
 
     #formCliente input[type="text"],

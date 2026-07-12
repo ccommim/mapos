@@ -1,22 +1,24 @@
 <style>
     .cliente-view-layout.form-horizontal .control-group {
         border-bottom: 1px solid #ffffff;
+        margin-bottom: 0;
     }
 
     .cliente-view-layout.form-horizontal .controls {
         margin-left: 20px;
-        padding-bottom: 8px 0;
+        padding-bottom: 0;
     }
 
     .cliente-view-layout.form-horizontal .control-label {
         text-align: left;
-        padding-top: 15px;
+        padding-top: 0;
     }
 
     .cliente-view-layout input[readonly],
     .cliente-view-layout textarea[readonly] {
         background: #fff;
         cursor: default;
+        margin-bottom: 0;
     }
 
     .cliente-view-layout input[readonly] {
