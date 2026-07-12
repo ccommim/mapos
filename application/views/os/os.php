@@ -150,9 +150,9 @@ foreach ($results as $r) {
     }
 
     echo '<tr>';
-    echo '<td>' . $r->idOs . '</td>';
+    echo '<td>' . numeroOS($r) . '</td>';
     echo '<td class="cli1"><a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-    echo '<td class="ph1">' . $r->nome . '</td>';
+        echo '<td class="ph1">' . $r->nome . '<br><small>' . ($r->nomes_tecnicos ?: 'Sem técnicos vinculados') . '</small></td>';
     echo '<td>' . $dataInicial . '</td>';
     echo '<td class="ph2">' . $dataFinal . '</td>';
     echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';

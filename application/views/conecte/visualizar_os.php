@@ -31,10 +31,11 @@ $totalProdutos = 0; ?>
                                             <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
                                             <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
                                             <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></br>
-                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?>
+                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?><br>
+                                                Técnicos: <?php echo $result->nomes_tecnicos ?: 'Sem técnicos vinculados' ?>
                                         </td>
                                         <td style="width: 18%; text-align: center">
-                                            <span><b>N° OS: </b><?php echo $result->idOs ?></span></br></br>
+                                            <span><b>N° OS: </b><?php echo numeroOS($result) ?></span></br></br>
                                             <span>Emissão: <?php echo date('d/m/Y') ?></span>
                                         </td>
                                     </tr>

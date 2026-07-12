@@ -108,6 +108,7 @@ class OsController extends REST_Controller
         }
 
         $_POST = (array) json_decode(file_get_contents('php://input'), true);
+        $_POST['usuarios_id'] = $this->logged_user()->idUsuarios;
 
         $this->load->library('form_validation');
 
@@ -143,6 +144,7 @@ class OsController extends REST_Controller
             'dataInicial' => $dataInicial,
             'clientes_id' => $this->post('clientes_id', true),
             'usuarios_id' => $this->post('usuarios_id', true),
+            'cust_tecnicos' => implode(',', array_filter((array) $this->post('cust_tecnicos', true))),
             'dataFinal' => $dataFinal,
             'garantia' => $this->post('garantia', true),
             'garantias_id' => $termoGarantiaId,
@@ -228,7 +230,7 @@ class OsController extends REST_Controller
            ! isset($_POST['dataFinal']) ||
            ! isset($_POST['status']) ||
            ! isset($_POST['clientes_id']) ||
-           ! isset($_POST['usuarios_id'])
+               ! isset($_POST['usuarios_id'])
         ) {
             $this->response([
                 'status' => false,
@@ -260,7 +262,8 @@ class OsController extends REST_Controller
         $data = [
             'dataInicial' => $dataInicial,
             'clientes_id' => $this->put('clientes_id', true),
-            'usuarios_id' => $this->put('usuarios_id', true),
+            'usuarios_id' => $os->usuarios_id,
+            'cust_tecnicos' => implode(',', array_filter((array) $this->put('cust_tecnicos', true))),
             'dataFinal' => $dataFinal,
             'garantia' => $this->put('garantia', true),
             'garantias_id' => $termoGarantiaId,
@@ -1004,7 +1007,7 @@ class OsController extends REST_Controller
 
         $troca = [
             $os->nomeCliente,
-            $os->idOs,
+            numeroOS($os),
             $os->status,
             'R$ ' . ($os->desconto != 0 && $os->valor_desconto != 0 ? number_format($os->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')),
             strip_tags($os->descricaoProduto),

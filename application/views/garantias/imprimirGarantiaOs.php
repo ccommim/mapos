@@ -96,7 +96,7 @@
                                             </td>
                                             <td style="width: 20%; text-align: center">
                                                 <br />
-                                                <span>Garantia OS: <?= $osGarantia->idOs ? $osGarantia->idOs : ""?>
+                                                <span>Garantia OS: <?= $osGarantia->idOs ? numeroOS($osGarantia) : ""?>
                                                 </span>
                                                 <br />
                                                 <span>Emissão:

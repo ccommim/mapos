@@ -112,7 +112,7 @@
 <!-- End-Action boxes -->
 
 <div class="row-fluid" style="margin-top: 0; display: flex">
-    <div class="Sspan12">
+    <div class="Sspan12" style="grid-template-columns: 1fr;">
         <div class="widget-box2">
             <div>
                 <h5 class="cardHeader">Agenda</h5>
@@ -141,7 +141,7 @@
         </div>
 
         <!-- New widget right -->
-        <div class="new-statisc">
+        <div class="new-statisc" style="display: none;">
             <div class="widget-box-new widbox-blak" style="height:100%">
                 <div>
                     <h5 class="cardHeader">Estatísticas do Sistema</h5>
@@ -533,7 +533,7 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= numeroOS($o) ?>
                                 </td>
 
                                 <td class="cli1">
@@ -622,7 +622,7 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= numeroOS($o) ?>
                                 </td>
 
                                 <td class="cli1">
@@ -712,7 +712,7 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= numeroOS($o) ?>
                                 </td>
 
                                 <td class="cli1">
@@ -801,7 +801,7 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= numeroOS($o) ?>
                                 </td>
 
                                 <td class="cli1">
@@ -890,7 +890,7 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= numeroOS($o) ?>
                                 </td>
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>

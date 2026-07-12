@@ -116,7 +116,7 @@ $totalProdutos = 0; ?>
                                 <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
-                                OS #: <?= $result->idOs ?><br>
+                                OS #: <?= numeroOS($result) ?><br>
                                 Data de Execução: <?= date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
                                 Data Final: <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                             </td>
@@ -141,7 +141,8 @@ $totalProdutos = 0; ?>
                                 <?= $emitente->nome; ?> <br>
                                 <?= $emitente->rua ?>, <?= $emitente->numero ?>, <?= $emitente->bairro ?><br>
                                 <?= $emitente->cidade ?> - <?= $emitente->uf ?> CEP: <?= $emitente->cep ?> <br>
-                                Responsável: <?= $result->nome ?>
+                                Responsável: <?= $result->nome ?><br>
+                                Técnicos: <?= $result->nomes_tecnicos ?: 'Sem técnicos vinculados' ?>
                             </td>
                         </tr>
                     </table>

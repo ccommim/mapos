@@ -4,7 +4,7 @@ $totalProdutos = 0; ?>
 <html lang="pt-br">
 
 <head>
-    <title>Map_OS_<?php echo $result->idOs ?>_<?php echo $result->nomeCliente ?></title>
+    <title>Map_OS_<?php echo numeroOS($result) ?>_<?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -137,7 +137,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 </tr>
                                 <tr>
                                     <td style="text-align: center; width: 100%; font-size: 12px;">
-                                        <b>N° OS: </b><span><?php echo $result->idOs ?></span>
+                                        <b>N° OS: </b><span><?php echo numeroOS($result) ?></span>
                                         <span style="padding-left: 5%;"><b>Status: </b><?php echo $result->status ?></span></br>
                                         <b>Emissão:</b> <?php echo date('d/m/Y H:i:s') ?>
                                     </td>
@@ -345,7 +345,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 </tr>
                                 <tr>
                                     <td style="text-align: center; width: 100%; font-size: 12px;">
-                                        <b>N° OS: </b><span><?php echo $result->idOs ?></span>
+                                        <b>N° OS: </b><span><?php echo numeroOS($result) ?></span>
                                         <span style="padding-left: 5%;"><b>Status: </b><?php echo $result->status ?></span></br>
                                         <b>Emissão:</b> <?php echo date('d/m/Y') ?>
                                     </td>

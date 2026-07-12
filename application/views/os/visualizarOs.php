@@ -15,7 +15,7 @@
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente->nome : ''), ($emitente ? $emitente->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+                        $troca = [$result->nomeCliente, numeroOS($result), $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente->nome : ''), ($emitente ? $emitente->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                         if (!empty($zapnumber)) {
                             echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://api.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
@@ -49,7 +49,7 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                     </tr>
                                 <?php } ?>
-                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?php echo sprintf('%04d', $result->idOs) ?></h3>
+                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?php echo numeroOS($result) ?></h3>
                             </tbody>
                         </table>
                         <table class="table table-condensend">
@@ -89,19 +89,20 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                         </span>
                                     </td>
                                     <td style="width: 40%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span>
-                                                    <h5><b>RESPONSÁVEL</b></h5>
-                                                </span>
-                                                <span><b><i class="fas fa-user"></i>
-                                                        <?php echo $result->nome ?></b></span><br />
-                                                <span><i class="fas fa-phone"></i>
-                                                    <?php echo $result->telefone_usuario ?></span><br />
-                                                <span><i class="fas fa-envelope"></i>
-                                                    <?php echo $result->email_usuario ?></span>
-                                            </li>
-                                        </ul>
+                                        <h5><b>TÉCNICOS VINCULADOS</b></h5>
+                                        <div style="margin-top:6px">
+                                            <?php
+                                            $listaTecnicos = array_filter(array_map('trim', explode(',', (string) ($result->nomes_tecnicos ?? ''))));
+                                            if (!empty($listaTecnicos)) { ?>
+                                                <ul style="margin:6px 0 0 18px; padding:0;">
+                                                    <?php foreach ($listaTecnicos as $nomeTecnico) { ?>
+                                                        <li style="margin:0 0 2px 0;"><?php echo $nomeTecnico; ?></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            <?php } else { ?>
+                                                <div style="margin-top:4px; color:#777;">Sem técnicos vinculados</div>
+                                            <?php } ?>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

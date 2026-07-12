@@ -95,6 +95,8 @@ class Os extends MY_Controller
             }
         }
 
+        $this->data['tecnicos'] = $this->os_model->getTecnicos();
+
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
@@ -127,7 +129,8 @@ class Os extends MY_Controller
             $data = [
                 'dataInicial' => $dataInicial,
                 'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
+                'cust_tecnicos' => implode(',', array_filter((array) $this->input->post('cust_tecnicos'))),
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
@@ -139,6 +142,8 @@ class Os extends MY_Controller
                 'faturado' => 0,
             ];
 
+
+    $this->data['tecnicos'] = $this->os_model->getTecnicos();
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -178,7 +183,9 @@ class Os extends MY_Controller
                 log_info('Adicionou uma OS. ID: ' . $id);
                 redirect(site_url('os/editar/') . $id);
             } else {
-                $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
+                $dbError = $this->db->error();
+                log_message('error', 'Falha ao inserir OS: ' . json_encode($dbError) . ' | dados: ' . json_encode(array_intersect_key($data, array_flip(['clientes_id','usuarios_id','cust_tecnicos','dataInicial']))));
+                $this->data['custom_error'] = '<div class="alert">Ocorreu um erro. Verifique os logs do servidor.</div>';
             }
         }
 
@@ -343,8 +350,9 @@ class Os extends MY_Controller
                 'status' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
+                'usuarios_id' => $os->usuarios_id,
                 'clientes_id' => $this->input->post('clientes_id'),
+                'cust_tecnicos' => implode(',', array_filter((array) $this->input->post('cust_tecnicos'))),
             ];
             //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
 
@@ -413,6 +421,9 @@ class Os extends MY_Controller
 
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        // Ensure technicians list is available to the edit view
+        $this->data['tecnicos'] = $this->os_model->getTecnicos();
 
         $this->data['view'] = 'os/editarOs';
 
@@ -583,6 +594,7 @@ class Os extends MY_Controller
         }
         
         $this->data['imprimirAnexo'] = isset($_ENV['IMPRIMIR_ANEXOS']) ? (filter_var($_ENV['IMPRIMIR_ANEXOS'] ?? false, FILTER_VALIDATE_BOOLEAN)) : false;
+        $this->data['export_pdf'] = false;
 
         $this->load->view('os/imprimirOs', $this->data);
     }
@@ -617,79 +629,7 @@ class Os extends MY_Controller
 
     public function imprimirPdf()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
-            redirect(base_url());
-        }
-
-        $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
-        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
-        $valorControl2Vias = $this->data['configuration']['control_2vias'] ?? null;
-        $configDuasVias = $this->mapos_model->get('configuracoes', 'valor', ['config' => 'control_2vias'], 1, 0, true);
-        if (isset($configDuasVias->valor) && $configDuasVias->valor !== '') {
-            $valorControl2Vias = $configDuasVias->valor;
-        }
-        $valorNormalizado2Vias = strtolower(trim((string) $valorControl2Vias));
-        $this->data['control_2vias_ativo'] = in_array($valorNormalizado2Vias, ['1', 'true', 'ativar', 'sim', 'yes', 'on'], true);
-        $appBaseUrl = getenv('APP_BASEURL') ?: ($_ENV['APP_BASEURL'] ?? '');
-        if (empty($appBaseUrl)) {
-            $appBaseUrl = base_url();
-        }
-        $appBaseUrl = rtrim($appBaseUrl, '/') . '/';
-        if (! empty($this->data['emitente']) && ! empty($this->data['emitente']->url_logo)) {
-            $logoPath = parse_url($this->data['emitente']->url_logo, PHP_URL_PATH);
-            if (! empty($logoPath)) {
-                $logoLocal = FCPATH . ltrim($logoPath, '/');
-                if (is_file($logoLocal)) {
-                    $this->data['emitente']->url_logo = rtrim($appBaseUrl, '/') . '/' . ltrim($logoPath, '/');
-                } else {
-                    $this->data['emitente']->url_logo = rtrim($appBaseUrl, '/') . '/assets/img/logo-mapos.png';
-                }
-            }
-        } elseif (! empty($this->data['emitente'])) {
-            $this->data['emitente']->url_logo = rtrim($appBaseUrl, '/') . '/assets/img/logo-mapos.png';
-        }
-        if ($this->data['configuration']['pix_key']) {
-            $this->data['qrCode'] = $this->os_model->getQrCode(
-                $this->uri->segment(3),
-                $this->data['configuration']['pix_key'],
-                $this->data['emitente']
-            );
-            $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
-        }
-
-        $this->data['imprimirAnexo'] = isset($_ENV['IMPRIMIR_ANEXOS']) ? (filter_var($_ENV['IMPRIMIR_ANEXOS'] ?? false, FILTER_VALIDATE_BOOLEAN)) : false;
-
-        $this->load->helper('mpdf');
-        $html = $this->load->view('os/imprimirOs', $this->data, true);
-        $baseAssetsUrl = rtrim($appBaseUrl, '/') . '/assets/';
-        $localAssetsPath = FCPATH . 'assets/';
-        $html = str_replace(
-            [
-                'href="' . $baseAssetsUrl,
-                "href='" . $baseAssetsUrl,
-                'src="' . $baseAssetsUrl,
-                "src='" . $baseAssetsUrl,
-            ],
-            [
-                'href="' . $localAssetsPath,
-                "href='" . $localAssetsPath,
-                'src="' . $localAssetsPath,
-                "src='" . $localAssetsPath,
-            ],
-            $html
-        );
-        pdf_create($html, 'ordem_servico_' . $this->uri->segment(3), true);
+        show_404();
     }
 
     public function enviar_email()

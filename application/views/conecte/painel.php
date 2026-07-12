@@ -125,8 +125,8 @@
                             }
 
                             echo '<tr>';
-                            echo '<td>' . $o->idOs . '</td>';
-                            echo '<td>' . $o->nome . '</td>';
+                            echo '<td>' . numeroOS($o) . '</td>';
+                            echo '<td>' . $o->nome . '<br><small>' . ($o->nomes_tecnicos ?: 'Sem técnicos vinculados') . '</small></td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';

@@ -799,6 +799,7 @@ class Mine extends CI_Controller
                 'dataInicial' => date('Y-m-d'),
                 'clientes_id' => $this->session->userdata('cliente_id'),
                 'usuarios_id' => $id,
+                'cust_tecnicos' => null,
                 'dataFinal' => date('Y-m-d'),
                 'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
                 'defeito' => $this->security->xss_clean($this->input->post('defeito')),

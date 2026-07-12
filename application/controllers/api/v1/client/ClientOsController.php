@@ -163,6 +163,7 @@ class ClientOsController extends REST_Controller
             'dataInicial' => date('Y-m-d'),
             'clientes_id' => $this->logged_client()->usuario->idClientes,
             'usuarios_id' => $usuarioId,
+            'cust_tecnicos' => null,
             'dataFinal' => date('Y-m-d'),
             'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
             'defeito' => $this->security->xss_clean($this->input->post('defeito')),

@@ -143,3 +143,30 @@ textarea {
 .lanc-table tbody > tr > th {
     padding: 7px;
 }
+
+/* Detalhes da OS: tecnicos em duas colunas e status/data empilhados */
+#divCadastrarOs .os-tech-box {
+    border: 1px solid #e8e8e8;
+    background: #fff;
+    padding: 8px;
+    max-height: 320px;
+    overflow: auto;
+}
+
+#divCadastrarOs .os-tech-box .checkbox {
+    width: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    padding-right: 8px;
+    vertical-align: top;
+}
+
+#divCadastrarOs .status-vertical > div + div {
+    margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+    #divCadastrarOs .os-tech-box .checkbox {
+        width: 100%;
+    }
+}

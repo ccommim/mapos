@@ -10,6 +10,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adicionado campo de observações nas telas de adicionar, editar e visualizar cliente.
 - Adicionado tratamento de normalização para dados de cliente no backend (maiúsculo) preservando e-mail em minúsculo.
 - Adicionada validação de e-mail duplicado com comparação normalizada em minúsculo.
+- Adicionado cadastro de técnicos em tabela própria (`cus_tecnico`) com tela de listagem, criação e edição.
 
 ### Changed
 - Alterado fluxo de clientes para persistir e exibir `cust_observacoes` no lugar do campo antigo de observações.
@@ -18,6 +19,8 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     - adicionadas colunas Data da Execução, Nome do Serviço, Observação, Quantidade, Valor e Valor Total;
     - ordenação por data de execução mais recente.
 - Alterado rótulo e ordem de colunas da aba de Ordens de Serviço para melhor leitura.
+- Alterado o número da OS para ser gravado no banco no formato `YYYY-sequência`, calculado pela data inicial no momento da criação.
+- Alterada a OS para manter o responsável como usuário logado e vincular múltiplos técnicos via `cust_tecnicos`.
 - Ajustado comportamento da aba Vendas para permanecer no código, porém oculta na interface.
 - Removido botão de editar OS da aba de Ordens de Serviço, mantendo apenas visualização.
 - Ajustado formulário de clientes para definir Estado em maiúsculo e padrão MG quando não informado.

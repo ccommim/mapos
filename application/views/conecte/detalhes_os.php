@@ -43,13 +43,15 @@
 
                                     <div class="span6" style="margin-left: 0">
                                         <h3>#Protocolo:
-                                            <?php echo $result->idOs ?>
+                                            <?php echo numeroOS($result) ?>
                                         </h3>
                                         <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                     </div>
                                     <div class="span6">
-                                        <label for="tecnico">Técnico / Responsável</label>
-                                        <input disabled="disabled" id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
+                                        <label for="responsavel">Responsável</label>
+                                        <input disabled="disabled" id="responsavel" class="span12" type="text" name="responsavel" value="<?php echo $result->nome ?>" />
+                                        <label for="tecnicos">Técnicos</label>
+                                        <input disabled="disabled" id="tecnicos" class="span12" type="text" name="tecnicos" value="<?php echo $result->nomes_tecnicos ?: 'Sem técnicos vinculados' ?>" />
 
                                     </div>
                                 </div>
@@ -274,7 +276,7 @@ foreach ($servicos as $s) {
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição*</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo numeroOS($result); ?> " />
 
             </div>
             <div class="span12" style="margin-left: 0">

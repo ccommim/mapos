@@ -422,6 +422,42 @@ class Migration_create_base extends CI_Migration
 			ON UPDATE NO ACTION
 		');
 
+        //# Create Table cus_tecnico
+        $this->dbforge->add_field([
+            'idTecnico' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => false,
+                'auto_increment' => true,
+            ],
+            'nome' => [
+                'type' => 'VARCHAR',
+                'constraint' => 80,
+                'null' => false,
+            ],
+            'criado_por' => [
+                'type' => 'VARCHAR',
+                'constraint' => 100,
+                'null' => true,
+            ],
+            'criado_em' => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
+            'alterado_por' => [
+                'type' => 'VARCHAR',
+                'constraint' => 100,
+                'null' => true,
+            ],
+            'alterado_em' => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
+        ]);
+        $this->dbforge->add_key('idTecnico', true);
+        $this->dbforge->create_table('cus_tecnico', true);
+        $this->db->query('ALTER TABLE  `cus_tecnico` ENGINE = InnoDB');
+
         //# Create Table garantias
         $this->dbforge->add_field([
             'idGarantias' => [
@@ -511,6 +547,10 @@ class Migration_create_base extends CI_Migration
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
+            ],
+            'cust_tecnicos' => [
+                'type' => 'TEXT',
+                'null' => true,
             ],
             'usuarios_id' => [
                 'type' => 'INT',

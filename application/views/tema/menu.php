@@ -73,6 +73,17 @@
                     </li>
                 <?php } ?>
 
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
+                    <li class="<?php if (isset($menuTecnicos)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('tecnicos') ?>"><i class='bx bx-id-card iconX'></i>
+                            <span class="title">Técnicos</span>
+                            <span class="title-tooltip">Técnicos</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                     <li class="<?php if (isset($menuVendas)) {
                         echo 'active';

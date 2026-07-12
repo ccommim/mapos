@@ -136,8 +136,8 @@ if (!$results) {
         }
 
         echo '<tr>';
-        echo '<td>' . $r->idOs . '</td>';
-        echo '<td>' . $r->nome . '</td>';
+        echo '<td>' . numeroOS($r) . '</td>';
+        echo '<td>' . $r->nome . '<br><small>' . ($r->nomes_tecnicos ?: 'Sem técnicos vinculados') . '</small></td>';
         echo '<td>' . $dataInicial . '</td>';
         echo '<td>' . $dataFinal . '</td>';
         echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';

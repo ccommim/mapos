@@ -23,24 +23,9 @@
                     <a title="Visualizar OS" class="button btn btn-primary" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text">Visualizar OS</span>
                     </a>
-                    <div class="button-container">
-                        <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse">
-                            <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span>
-                        </a>
-                        <div class="cascading-buttons">
-                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
-                                <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Papel A4</span>
-                            </a>
-                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
-                                <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
-                            </a>
-                            <?php if ($result->garantias_id) { ?>
-                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->idOs; ?>">
-                                    <span class="button__icon"><i class="bx bx-paperclip"></i></span> <span class="button__text">Termo Garantia</span>
-                                </a>
-                            <?php } ?>
-                        </div>
-                    </div>
+                    <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span>
+                    </a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
@@ -74,55 +59,50 @@
                                     <?php echo form_hidden('idOs', $result->idOs) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>N° OS: <?php echo $result->idOs; ?></h3>
-                                        <div class="span6" style="margin-left: 0">
+                                        <div class="span6" style="margin-left: 0; padding-right: 12px; box-sizing: border-box;">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
                                             <input id="valor" type="hidden" name="valor" value="" />
+
+                                            <div class="status-vertical" style="margin-top: 12px;">
+                                                <div>
+                                                    <label for="status">Status<span class="required">*</span></label>
+                                                    <select class="span12" name="status" id="status" value="">
+                                                        <option <?php if ($result->status == 'Aberto') { echo 'selected'; } ?> value="Aberto">Aberto</option>
+                                                        <option <?php if ($result->status == 'Orçamento') { echo 'selected'; } ?> value="Orçamento">Orçamento</option>
+                                                        <option <?php if ($result->status == 'Negociação') { echo 'selected'; } ?> value="Negociação">Negociação</option>
+                                                        <option <?php if ($result->status == 'Aprovado') { echo 'selected'; } ?> value="Aprovado">Aprovado</option>
+                                                        <option <?php if ($result->status == 'Aguardando Peças') { echo 'selected'; } ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                        <option <?php if ($result->status == 'Em Andamento') { echo 'selected'; } ?> value="Em Andamento">Em Andamento</option>
+                                                        <option <?php if ($result->status == 'Finalizado') { echo 'selected'; } ?> value="Finalizado">Finalizado</option>
+                                                        <option <?php if ($result->status == 'Faturado') { echo 'selected'; } ?> value="Faturado">Faturado</option>
+                                                        <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>
+                                                    </select>
+                                                </div>
+                                                <div style="margin-top: 8px;">
+                                                    <label for="dataInicial">Data de Execução<span class="required">*</span></label>
+                                                    <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="span6">
+                                        <div class="span6" style="padding-left: 12px; box-sizing: border-box;">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
+                                            <input id="tecnico" type="hidden" name="tecnico" value="<?php echo $result->nome ?>" />
+                                            <input id="usuarios_id" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
+                                            <?php $tecnicosSelecionados = array_filter(array_map('trim', explode(',', (string) $result->cust_tecnicos))); ?>
+                                            <div class="os-tech-box" style="margin-top:6px">
+                                                <?php if (!empty($tecnicos)) {
+                                                    foreach ($tecnicos as $tecnico) {
+                                                        $checked = in_array((string) $tecnico->idTecnico, $tecnicosSelecionados, true) ? 'checked' : ''; ?>
+                                                        <div class="checkbox"><label><input type="checkbox" name="cust_tecnicos[]" value="<?= $tecnico->idTecnico; ?>" <?= $checked; ?> /> &nbsp;<?= $tecnico->nome; ?></label></div>
+                                                    <?php }
+                                                } else { ?>
+                                                    <div class="text-muted">Nenhum técnico cadastrado.</div>
+                                                <?php } ?>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-                                                } ?> value="Aberto">Aberto</option>
-                                                <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-                                                } ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if ($result->status == 'Negociação') {
-                                                    echo 'selected';
-                                                } ?> value="Negociação">Negociação</option>
-                                                <option <?php if ($result->status == 'Aprovado') {
-                                                    echo 'selected';
-                                                } ?> value="Aprovado">Aprovado</option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') {
-                                                    echo 'selected';
-                                                } ?> value="Aguardando Peças">Aguardando Peças</option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-                                                } ?> value="Em Andamento">Em Andamento</option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-                                                } ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-                                                } ?> value="Faturado">Faturado</option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-                                                } ?> value="Cancelado">Cancelado</option>                                                          
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data de Execução<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
-                                        </div>
+
                                         <div class="span3" style="display: none;">
                                             <label for="dataFinal">Data Final</label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
@@ -145,7 +125,7 @@
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes"><h4>Observações</h4></label>
+                                        <label for="observacoes" style="margin-bottom: 4px;"><h4 style="margin: 0; line-height: 1.1;">Observações</h4></label>
                                         <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0; display: none;">
@@ -910,18 +890,12 @@ if (!$anotacoes) {
                 cliente: {
                     required: true
                 },
-                tecnico: {
-                    required: true
-                },
                 dataInicial: {
                     required: true
                 }
             },
             messages: {
                 cliente: {
-                    required: 'Campo Requerido.'
-                },
-                tecnico: {
                     required: 'Campo Requerido.'
                 },
                 dataInicial: {
@@ -936,6 +910,12 @@ if (!$anotacoes) {
             unhighlight: function (element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
+            }
+        });
+        $("input[name='cust_tecnicos[]']").rules("add", {
+            required: true,
+            messages: {
+                required: 'Selecione ao menos um técnico.'
             }
         });
 

@@ -6,7 +6,7 @@ if (! defined('BASEPATH')) {
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-function pdf_create($html, $filename, $stream = true, $landscape = false)
+function pdf_create($html, $filename, $stream = true, $landscape = false, $forceDownload = false)
 {
     if ($landscape) {
         $mpdf = new \Mpdf\Mpdf(['c', 'A4-L', 'tempDir' => FCPATH . 'assets/uploads/temp/']);
@@ -18,7 +18,8 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
     $mpdf->WriteHTML($html);
 
     if ($stream) {
-        $mpdf->Output($filename . '.pdf', 'I');
+        $outputMode = $forceDownload ? 'D' : 'I';
+        $mpdf->Output($filename . '.pdf', $outputMode);
     } else {
         $mpdf->Output(FCPATH . 'assets/uploads/temp/' . $filename . '.pdf', 'F');
 

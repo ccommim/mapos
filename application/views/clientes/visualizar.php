@@ -220,7 +220,7 @@
                         $nomeServico = $r->nomeServico ?: $r->servico;
                         $observacaoOs = trim(strip_tags((string) $r->observacoes));
                         echo '<tr>';
-                        echo '<td>' . $r->idOs . '</td>';
+                        echo '<td>' . numeroOS($r) . '</td>';
                         echo '<td>' . $dataExecucao . '</td>';
                         echo '<td>' . htmlspecialchars($nomeServico ?: '-', ENT_QUOTES, 'UTF-8') . '</td>';
                         echo '<td>' . htmlspecialchars($observacaoOs !== '' ? $observacaoOs : '-', ENT_QUOTES, 'UTF-8') . '</td>';

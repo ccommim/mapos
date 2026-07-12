@@ -88,6 +88,7 @@
                                                                     <h5>Responsável</h5>
                                                                 </span>
                                                                 <span><?php echo $result->nome ?></span> <br />
+                                                                <span>Técnicos: <?php echo $result->nomes_tecnicos ?: 'Sem técnicos vinculados' ?></span> <br />
                                                                 <span>Telefone: <?php echo $result->telefone ?></span><br />
                                                                 <span>Email: <?php echo $result->email ?></span>
                                                             </li>
@@ -236,7 +237,7 @@
     </div>
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12"> <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name'); ?> - Versão <?php echo $this->config->item('app_version'); ?></div>
+        <div id="footer" class="span12"> <?= $this->config->item('app_name'); ?> - Versão <?= $this->config->item('app_version'); ?></div>
     </div>
 
     <!-- javascript

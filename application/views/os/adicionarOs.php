@@ -28,37 +28,48 @@
                                 <?php
                                 } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-                                    <div class="span12" style="padding: 1%">
-                                        <div class="span6">
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span6" style="margin-left: 0; padding-right: 12px; box-sizing: border-box;">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo set_value('cliente', $cliente_preselecionado_nome ?? ''); ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo set_value('clientes_id', $cliente_preselecionado_id ?? ''); ?>" />
+
+                                            <div class="status-vertical" style="margin-top: 12px;">
+                                                <div>
+                                                    <label for="status">Status<span class="required">*</span></label>
+                                                    <select class="span12" name="status" id="status" value="">
+                                                        <option value="Aberto">Aberto</option>
+                                                        <option value="Orçamento">Orçamento</option>
+                                                        <option value="Negociação">Negociação</option>
+                                                        <option value="Aprovado">Aprovado</option>
+                                                        <option value="Aguardando Peças">Aguardando Peças</option>
+                                                        <option value="Em Andamento">Em Andamento</option>
+                                                        <option value="Finalizado">Finalizado</option>
+                                                        <option value="Faturado">Faturado</option>
+                                                        <option value="Cancelado">Cancelado</option>
+                                                    </select>
+                                                </div>
+                                                <div style="margin-top: 8px;">
+                                                    <label for="dataInicial">Data de Execução<span class="required">*</span></label>
+                                                    <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="span6">
+                                        <div class="span6" style="padding-left: 12px; box-sizing: border-box;">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
+                                            <input id="tecnico" type="hidden" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
+                                            <?php if (!empty($tecnicos)) { ?>
+                                                <div class="os-tech-box" style="margin-top:6px">
+                                                    <?php foreach ($tecnicos as $tecnico) { ?>
+                                                        <div class="checkbox"><label><input type="checkbox" name="cust_tecnicos[]" value="<?= $tecnico->idTecnico; ?>" <?= in_array($tecnico->idTecnico, (array) set_value('cust_tecnicos', [])) ? 'checked' : ''; ?> /> &nbsp;<?= $tecnico->nome; ?></label></div>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="text-muted">Nenhum técnico cadastrado.</div>
+                                            <?php } ?>
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
                                         </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option value="Aberto">Aberto</option>
-                                                <option value="Orçamento">Orçamento</option>
-                                                <option value="Negociação">Negociação</option>
-                                                <option value="Aprovado">Aprovado</option>
-                                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                                <option value="Em Andamento">Em Andamento</option>
-                                                <option value="Finalizado">Finalizado</option>
-                                                <option value="Faturado">Faturado</option>
-                                                <option value="Cancelado">Cancelado</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data de Execução<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
-                                        </div>
+
                                         <div class="span3" style="display: none;">
                                             <label for="dataFinal">Data Final</label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y'); ?>" />
@@ -143,9 +154,6 @@
                 cliente: {
                     required: true
                 },
-                tecnico: {
-                    required: true
-                },
                 dataInicial: {
                     required: true
                 }
@@ -153,9 +161,6 @@
             },
             messages: {
                 cliente: {
-                    required: 'Campo Requerido.'
-                },
-                tecnico: {
                     required: 'Campo Requerido.'
                 },
                 dataInicial: {
@@ -170,6 +175,12 @@
             unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
+            }
+        });
+        $("input[name='cust_tecnicos[]']").rules("add", {
+            required: true,
+            messages: {
+                required: 'Selecione ao menos um técnico.'
             }
         });
         $(".datepicker").datepicker({

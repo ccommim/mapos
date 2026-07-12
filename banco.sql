@@ -226,6 +226,7 @@ CREATE TABLE IF NOT EXISTS `os` (
   `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `tipo_desconto` varchar(8) NULL DEFAULT NULL,
   `clientes_id` INT(11) NOT NULL,
+  `cust_tecnicos` TEXT NULL DEFAULT NULL,
   `usuarios_id` INT(11) NOT NULL,
   `lancamento` INT(11) NULL DEFAULT NULL,
   `faturado` TINYINT(1) NOT NULL,

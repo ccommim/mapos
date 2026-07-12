@@ -4,6 +4,17 @@ use Piggly\Pix\StaticPayload;
 
 class Os_model extends CI_Model
 {
+    private function tecnicoStatusDisponivel(): bool
+    {
+        static $statusDisponivel = null;
+
+        if ($statusDisponivel === null) {
+            $statusDisponivel = $this->db->field_exists('status', 'cus_tecnico');
+        }
+
+        return $statusDisponivel;
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -83,6 +94,16 @@ class Os_model extends CI_Model
 
         $result = ! $one ? $query->result() : $query->row();
 
+            if ($result) {
+                if ($one) {
+                    $result->nomes_tecnicos = $this->nomesTecnicosPorIds($result->cust_tecnicos ?? '');
+                } else {
+                    foreach ($result as $item) {
+                        $item->nomes_tecnicos = $this->nomesTecnicosPorIds($item->cust_tecnicos ?? '');
+                    }
+                }
+        }
+
         return $result;
     }
 
@@ -96,7 +117,12 @@ class Os_model extends CI_Model
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
 
-        return $this->db->get()->row();
+        $result = $this->db->get()->row();
+            if ($result) {
+                $result->nomes_tecnicos = $this->nomesTecnicosPorIds($result->cust_tecnicos ?? '');
+            }
+
+        return $result;
     }
 
     public function getByIdCobrancas($id)
@@ -110,7 +136,12 @@ class Os_model extends CI_Model
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
 
-        return $this->db->get()->row();
+        $result = $this->db->get()->row();
+        if ($result) {
+            $result->nomes_tecnicos = $this->nomesTecnicosPorIds($result->cust_tecnicos ?? '');
+        }
+
+        return $result;
     }
 
     public function getProdutos($id = null)
@@ -135,6 +166,10 @@ class Os_model extends CI_Model
 
     public function add($table, $data, $returnId = false)
     {
+        if ($table === 'os' && empty($data['idOs'])) {
+            $data['idOs'] = $this->proximoNumeroOs($data['dataInicial'] ?? null);
+        }
+
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
             if ($returnId == true) {
@@ -145,6 +180,19 @@ class Os_model extends CI_Model
         }
 
         return false;
+    }
+
+    private function proximoNumeroOs($dataInicial = null): int
+    {
+        $timestamp = $dataInicial ? strtotime($dataInicial) : time();
+        $ano = (int) date('Y', $timestamp);
+        $inicio = $ano * 10000;
+        $fim = $inicio + 9999;
+
+        $query = $this->db->query('SELECT MAX(idOs) AS maxId FROM os WHERE idOs BETWEEN ? AND ?', [$inicio, $fim])->row();
+        $maxId = (int) ($query->maxId ?? 0);
+
+        return $maxId >= $inicio ? $maxId + 1 : $inicio + 1;
     }
 
     public function edit($table, $data, $fieldID, $ID)
@@ -173,6 +221,53 @@ class Os_model extends CI_Model
     public function count($table)
     {
         return $this->db->count_all($table);
+    }
+
+    public function nomesTecnicosPorIds($ids = ''): string
+    {
+        $ids = trim((string) $ids);
+        if ($ids === '') {
+            return '';
+        }
+
+        $listaIds = array_values(array_filter(array_map('intval', explode(',', $ids))));
+        if (empty($listaIds)) {
+            return '';
+        }
+
+        $this->db->select('nome');
+        $this->db->where_in('idTecnico', $listaIds);
+        $this->db->order_by('nome', 'asc');
+        $tecnicos = $this->db->get('cus_tecnico')->result();
+
+        $nomes = array_map(static function ($tecnico) {
+            return $tecnico->nome;
+        }, $tecnicos);
+
+        return implode(', ', $nomes);
+    }
+
+    public function getTecnicos()
+    {
+        $this->db->from('cus_tecnico');
+        if ($this->tecnicoStatusDisponivel()) {
+            $this->db->where('status', 1);
+        }
+        $this->db->order_by('nome', 'asc');
+
+        return $this->db->get()->result();
+    }
+
+    public function getTecnicoPadrao()
+    {
+        $this->db->from('cus_tecnico');
+        if ($this->tecnicoStatusDisponivel()) {
+            $this->db->where('status', 1);
+        }
+        $this->db->order_by('nome', 'asc');
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
     }
 
     public function autoCompleteProduto($q)

@@ -37,14 +37,15 @@ $totalProdutos = 0;
                     <div class="contatoEmitente">
                         <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span></br>
                         <span style="font-weight: bold;"><?= $emitente->email ?></span></br>
-                        <span style="word-break: break-word;">Responsável: <b><?= $result->nome ?></b></span>
+                        <span style="word-break: break-word;">Responsável: <b><?= $result->nome ?></b></span><br>
+                        <span style="word-break: break-word;">Técnicos: <b><?= $result->nomes_tecnicos ?: 'Sem técnicos vinculados' ?></b></span>
                     </div>
                 <?php endif; ?>
             </header>
             <section>
                 <div class="title">
 
-                    ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                    OS #<?= numeroOS($result) ?>
                     <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                 </div>
 
@@ -248,7 +249,7 @@ $totalProdutos = 0;
             <footer>
                 <div class="detalhes">
                     <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                    <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
+                    <span>OS <b>#<?= numeroOS($result) ?></b></span>
                     <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                 </div>
                 <div class="assinaturas">

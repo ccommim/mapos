@@ -6,7 +6,7 @@ $totalProdutos = 0;
 <html lang="pt-br">
 
 <head>
-    <title><?= $this->config->item('app_name') ?> - <?= $result->idOs ?> - <?= $result->nomeCliente ?></title>
+    <title><?= $this->config->item('app_name') ?> - <?= numeroOS($result) ?> - <?= $result->nomeCliente ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap5.3.2.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
@@ -22,7 +22,7 @@ $totalProdutos = 0;
                     </div>
                 <?php else : ?>
                     <div class="imgLogo" class="align-middle">
-                        <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:140px;">
+                        <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:120px;">
                     </div>
                     <div class="emitente">
                         <span style="font-size: 16px;"><b><?= $emitente->nome ?></b></span></br>
@@ -30,22 +30,18 @@ $totalProdutos = 0;
                             <span class="align-middle">CNPJ: <?= $emitente->cnpj ?></span></br>
                         <?php endif; ?>
                         <span class="align-middle">
-                            <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?><br>
-                            <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
+                            <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?> - <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
                         </span>
-                    </div>
-                    <div class="contatoEmitente">
-                        <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span></br>
-                        <span style="font-weight: bold;"><?= $emitente->email ?></span></br>
-                        <span style="word-break: break-word;">Responsável: <b><?= $result->nome ?></b></span>
+                        <span class="contato-item"><span class="contato-label">E-mail:</span> <?= $emitente->email ?></span>
+                        <span class="contato-item"><span class="contato-label">Telefone:</span> <?= $emitente->telefone ?></span>
                     </div>
                 <?php endif; ?>
             </header>
             <section>
                 <div class="title">
                     <?php if (!empty($control_2vias_ativo)) : ?><span class="via">Via cliente</span><?php endif; ?>
-                    ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y H:i:s') ?></span>
+                    <span class="ordem-servico">OS <span class="ordem-servico-numero">#<?= numeroOS($result) ?></span></span>
+                    <span class="emissao">Data: <?= date('d/m/Y') ?></span>
                 </div>
 
                 <?php if ($result->dataInicial != null): ?>
@@ -53,9 +49,6 @@ $totalProdutos = 0;
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="table-secondary">
-                                    <th class="text-center">STATUS</th>
-                                    <th class="text-center">DATA DE EXECUÇÃO</th>
-                                    <th class="text-center">DATA FINAL</th>
                                     <?php if ($result->garantia) : ?>
                                         <th class="text-center">GARANTIA</th>
                                     <?php endif; ?>
@@ -66,9 +59,6 @@ $totalProdutos = 0;
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-center"><?= $result->status ?></td>
-                                    <td class="text-center"><?= date('d/m/Y', strtotime($result->dataInicial)) ?></td>
-                                    <td class="text-center"><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></td>
                                     <?php if ($result->garantia) : ?>
                                         <td class="text-center"><?= $result->garantia . ' dia(s)' ?></td>
                                     <?php endif; ?>
@@ -82,17 +72,22 @@ $totalProdutos = 0;
                 <?php endif; ?>
 
                 <div class="subtitle">DADOS DO CLIENTE</div>
-                <div class="dados">
-                    <div>
-                        <span><b><?= $result->nomeCliente ?></b></span><br />
-                        <span>CPF/CNPJ: <?= $result->documento ?></span><br />
-                        <span><?= $result->contato_cliente.' '.$result->telefone ?><?= $result->telefone && $result->celular ? ' / '.$result->celular : $result->celular ?></span><br />
-                        <span><?= $result->email ?></span><br />
+                <div class="dados dados-cliente">
+                    <div class="cliente-nome">
+                        <span><b><?= $result->nomeCliente ?></b></span>
                     </div>
-                    <div style="text-align: right;">
+                    <div class="cliente-detalhes-linha">
+                    <div class="cliente-info">
+                        <?php $documentoNumerico = preg_replace('/\D+/', '', (string) $result->documento); ?>
+                        <?php $rotuloDocumento = strlen($documentoNumerico) === 11 ? 'CPF' : (strlen($documentoNumerico) === 14 ? 'CNPJ' : 'Documento'); ?>
+                        <span><?= $rotuloDocumento ?>: <?= $result->documento ?></span><br />
+                        <?php if (!empty($result->email)) : ?><span><i class="fas fa-envelope"></i> <?= $result->email ?></span><br /><?php endif; ?>
+                        <?php if ($result->telefone || $result->celular) : ?><span><i class="fas fa-phone"></i> <?= $result->contato_cliente.' '.$result->telefone ?><?= $result->telefone && $result->celular ? ' / '.$result->celular : $result->celular ?></span><br /><?php endif; ?>
+                    </div>
+                    <div class="cliente-endereco">
                         <span><?= $result->rua.', '.$result->numero.', '.$result->bairro ?></span><br />
-                        <span><?= $result->complemento.' - '.$result->cidade.' - '.$result->estado ?></span><br />
-                        <span>CEP: <?= $result->cep ?></span><br />
+                        <span><?= $result->complemento ? $result->complemento.' - ' : '' ?><?= $result->cidade.' - '.$result->estado ?> | CEP: <?= $result->cep ?></span><br />
+                    </div>
                     </div>
                 </div>
 
@@ -203,60 +198,62 @@ $totalProdutos = 0;
                     </div>
                 <?php endif; ?>
 
-                <?php if ($totalProdutos != 0 || $totalServico != 0) : ?>
-                    <div class="pagamento">
-                        <div class="qrcode">
-                            <?php if ($this->data['configuration']['pix_key']) : ?>
-                                <div><img width="130px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></div>
-                                <div style="display: flex; flex-wrap: wrap; align-content: center;">
-                                    <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
-                                    <div class="chavePix">Chave Pix: <b><?= $chaveFormatada ?></b></div>
-                                </div>
-                            <?php else: ?>
-                                <div></div>
-                                <div></div>
-                            <?php endif; ?>
-                        </div>
-                        <div>
-                            <div class="tabela">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr class="table-secondary">
-                                            <th colspan="2">RESUMO DOS VALORES</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($result->valor_desconto != 0) : ?>
-                                            <tr>
-                                                <td width="65%">SUBTOTAL</td>
-                                                <td>R$ <b><?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></b></td>
-                                            </tr>
-                                            <tr>
-                                                <td>DESCONTO</td>
-                                                <td>R$ <b><?= number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') ?></b></td>
-                                            </tr>
-                                            <tr>
-                                                <td>TOTAL</td>
-                                                <td>R$ <?= number_format($result->valor_desconto, 2, ',', '.') ?></td>
-                                            </tr>
-                                        <?php else : ?>
-                                            <tr>
-                                                <td style="width:290px">TOTAL</td>
-                                                <td>R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></td>
-                                            </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
+                <?php
+                $subtotalGeral = (float) $totalProdutos + (float) $totalServico;
+                $temDesconto = ((float) ($result->desconto ?? 0) > 0 && (float) ($result->valor_desconto ?? 0) > 0);
+                $totalFinal = $temDesconto ? (float) $result->valor_desconto : $subtotalGeral;
+                $valorAbatido = max(0, $subtotalGeral - $totalFinal);
+                $tipoDesconto = (string) ($result->tipo_desconto ?? '');
+                $descontoInfo = '';
+                if ($temDesconto) {
+                    $descontoInfo = $tipoDesconto === 'porcento'
+                        ? number_format((float) $result->desconto, 2, ',', '.') . '%'
+                        : 'R$ ' . number_format((float) $result->desconto, 2, ',', '.');
+                }
+                ?>
+                <?php if ($subtotalGeral > 0 || $temDesconto) : ?>
+                    <div class="tabela">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="text-end"><b>SUBTOTAL:</b></td>
+                                    <td class="text-end" style="width: 180px;">R$ <?= number_format($subtotalGeral, 2, ',', '.') ?></td>
+                                </tr>
+                                <?php if ($temDesconto) : ?>
+                                    <tr>
+                                        <td class="text-end"><b>DESCONTO APLICADO<?= $descontoInfo ? ' (' . $descontoInfo . ')' : '' ?>:</b></td>
+                                        <td class="text-end">- R$ <?= number_format($valorAbatido, 2, ',', '.') ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                                <tr>
+                                    <td class="text-end"><b>TOTAL FINAL:</b></td>
+                                    <td class="text-end"><b>R$ <?= number_format($totalFinal, 2, ',', '.') ?></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+
+            </section>
+            <footer>
+                <?php if (($totalProdutos != 0 || $totalServico != 0) && !empty($this->data['configuration']['pix_key']) && !empty($qrCode)) : ?>
+                    <div class="qrcode qrcode-pix qrcode-rodape">
+                        <div class="qrcode-imgwrap"><img class="qrcode-img" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></div>
+                        <div class="pix-conteudo">
+                            <div class="pix-titulo">PAGUE COM PIX</div>
+                            <div class="pix-logo-wrap">
+                                <img class="pix-logo" src="<?= base_url() ?>assets/img/logo_pix.png" alt="Pix" />
                             </div>
+                            <ol class="pix-passos">
+                                <li>Abra o app do seu banco</li>
+                                <li>Escolha pagar com QR Code</li>
+                                <li>Aponte a camera para o codigo</li>
+                            </ol>
+                            <div class="chavePix">Chave Pix: <?= $chaveFormatada ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
-            </section>
-            <footer>
                 <div class="detalhes">
-                    <span>Data de execução: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                    <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
-                    <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                 </div>
                 <div class="assinaturas">
                     <span>Assinatura do cliente</span>
@@ -274,7 +271,7 @@ $totalProdutos = 0;
                         </div>
                     <?php else : ?>
                         <div class="imgLogo" class="align-middle">
-                            <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:140px;">
+                            <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:120px;">
                         </div>
                         <div class="emitente">
                             <span style="font-size: 16px;"><b><?= $emitente->nome ?></b></span></br>
@@ -282,14 +279,10 @@ $totalProdutos = 0;
                                 <span class="align-middle">CNPJ: <?= $emitente->cnpj ?></span></br>
                             <?php endif; ?>
                             <span class="align-middle">
-                                <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?><br>
-                                <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
+                                <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?> - <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
                             </span>
-                        </div>
-                        <div class="contatoEmitente">
-                            <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span></br>
-                            <span style="font-weight: bold;"><?= $emitente->email ?></span></br>
-                            <span style="word-break: break-word;">Responsável: <b><?= $result->nome ?></b></span>
+                            <span class="contato-item"><span class="contato-label">E-mail:</span> <?= $emitente->email ?></span>
+                            <span class="contato-item"><span class="contato-label">Telefone:</span> <?= $emitente->telefone ?></span>
                         </div>
                     <?php endif; ?>
                 </header>
@@ -299,8 +292,8 @@ $totalProdutos = 0;
                         <?php $totalServico = 0;
 $totalProdutos = 0; ?>
                         <?php if (!empty($control_2vias_ativo)) : ?><span class="via">Via Empresa</span><?php endif; ?>
-                        ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
-                        <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
+                        <span class="ordem-servico">OS <span class="ordem-servico-numero">#<?= numeroOS($result) ?></span></span>
+                        <span class="emissao">Data: <?= date('d/m/Y') ?></span>
                     </div>
 
                     <?php if ($result->dataInicial != null): ?>
@@ -308,9 +301,6 @@ $totalProdutos = 0; ?>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center">STATUS</th>
-                                        <th class="text-center">DATA DE EXECUÇÃO</th>
-                                        <th class="text-center">DATA FINAL</th>
                                         <?php if ($result->garantia) : ?>
                                             <th class="text-center">GARANTIA</th>
                                         <?php endif; ?>
@@ -321,9 +311,6 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-center"><?= $result->status ?></td>
-                                        <td class="text-center"><?= date('d/m/Y', strtotime($result->dataInicial)) ?></td>
-                                        <td class="text-center"><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></td>
                                         <?php if ($result->garantia) : ?>
                                             <td class="text-center"><?= $result->garantia . ' dia(s)' ?></td>
                                         <?php endif; ?>
@@ -337,17 +324,22 @@ $totalProdutos = 0; ?>
                     <?php endif; ?>
 
                     <div class="subtitle">DADOS DO CLIENTE</div>
-                    <div class="dados">
-                        <div>
-                            <span><b><?= $result->nomeCliente ?></b></span><br />
-                            <span>CPF/CNPJ: <?= $result->documento ?></span><br />
-                            <span><?= $result->contato_cliente.' '.$result->telefone ?><?= $result->telefone && $result->celular ? ' / '.$result->celular : $result->celular ?></span><br />
-                            <span><?= $result->email ?></span><br />
+                    <div class="dados dados-cliente">
+                        <div class="cliente-nome">
+                            <span><b><?= $result->nomeCliente ?></b></span>
                         </div>
-                        <div style="text-align: right;">
+                        <div class="cliente-detalhes-linha">
+                        <div class="cliente-info">
+                            <?php $documentoNumerico = preg_replace('/\D+/', '', (string) $result->documento); ?>
+                            <?php $rotuloDocumento = strlen($documentoNumerico) === 11 ? 'CPF' : (strlen($documentoNumerico) === 14 ? 'CNPJ' : 'Documento'); ?>
+                            <span><?= $rotuloDocumento ?>: <?= $result->documento ?></span><br />
+                            <?php if (!empty($result->email)) : ?><span><i class="fas fa-envelope"></i> <?= $result->email ?></span><br /><?php endif; ?>
+                            <?php if ($result->telefone || $result->celular) : ?><span><i class="fas fa-phone"></i> <?= $result->contato_cliente.' '.$result->telefone ?><?= $result->telefone && $result->celular ? ' / '.$result->celular : $result->celular ?></span><br /><?php endif; ?>
+                        </div>
+                        <div class="cliente-endereco">
                             <span><?= $result->rua.', '.$result->numero.', '.$result->bairro ?></span><br />
-                            <span><?= $result->complemento.' - '.$result->cidade.' - '.$result->estado ?></span><br />
-                            <span>CEP: <?= $result->cep ?></span><br />
+                            <span><?= $result->complemento ? $result->complemento.' - ' : '' ?><?= $result->cidade.' - '.$result->estado ?> | CEP: <?= $result->cep ?></span><br />
+                        </div>
                         </div>
                     </div>
 
@@ -458,60 +450,44 @@ $totalProdutos = 0; ?>
                         </div>
                     <?php endif; ?>
 
-                    <?php if ($totalProdutos != 0 || $totalServico != 0) : ?>
-                        <div class="pagamento">
-                            <div class="qrcode">
-                                <?php if ($this->data['configuration']['pix_key']) : ?>
-                                    <div><img width="130px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></div>
-                                    <div style="display: flex; flex-wrap: wrap; align-content: center;">
-                                        <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
-                                        <div class="chavePix">Chave Pix: <b><?= $chaveFormatada ?></b></div>
-                                    </div>
-                                <?php else: ?>
-                                    <div></div>
-                                    <div></div>
-                                <?php endif; ?>
-                            </div>
-                            <div>
-                                <div class="tabela">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr class="table-secondary">
-                                                <th colspan="2">RESUMO DOS VALORES</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if ($result->valor_desconto != 0) : ?>
-                                                <tr>
-                                                    <td width="65%">SUBTOTAL</td>
-                                                    <td>R$ <b><?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DESCONTO</td>
-                                                    <td>R$ <b><?= number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') ?></b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>TOTAL</td>
-                                                    <td>R$ <?= number_format($result->valor_desconto, 2, ',', '.') ?></td>
-                                                </tr>
-                                            <?php else : ?>
-                                                <tr>
-                                                    <td style="width:290px">TOTAL</td>
-                                                    <td>R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></td>
-                                                </tr>
-                                            <?php endif; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <?php
+                    $subtotalGeral = (float) $totalProdutos + (float) $totalServico;
+                    $temDesconto = ((float) ($result->desconto ?? 0) > 0 && (float) ($result->valor_desconto ?? 0) > 0);
+                    $totalFinal = $temDesconto ? (float) $result->valor_desconto : $subtotalGeral;
+                    $valorAbatido = max(0, $subtotalGeral - $totalFinal);
+                    $tipoDesconto = (string) ($result->tipo_desconto ?? '');
+                    $descontoInfo = '';
+                    if ($temDesconto) {
+                        $descontoInfo = $tipoDesconto === 'porcento'
+                            ? number_format((float) $result->desconto, 2, ',', '.') . '%'
+                            : 'R$ ' . number_format((float) $result->desconto, 2, ',', '.');
+                    }
+                    ?>
+                    <?php if ($subtotalGeral > 0 || $temDesconto) : ?>
+                        <div class="tabela">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-end"><b>SUBTOTAL:</b></td>
+                                        <td class="text-end" style="width: 180px;">R$ <?= number_format($subtotalGeral, 2, ',', '.') ?></td>
+                                    </tr>
+                                    <?php if ($temDesconto) : ?>
+                                        <tr>
+                                            <td class="text-end"><b>DESCONTO APLICADO<?= $descontoInfo ? ' (' . $descontoInfo . ')' : '' ?>:</b></td>
+                                            <td class="text-end">- R$ <?= number_format($valorAbatido, 2, ',', '.') ?></td>
+                                        </tr>
+                                    <?php endif; ?>
+                                    <tr>
+                                        <td class="text-end"><b>TOTAL FINAL:</b></td>
+                                        <td class="text-end"><b>R$ <?= number_format($totalFinal, 2, ',', '.') ?></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     <?php endif; ?>
                 </section>
                 <footer>
                     <div class="detalhes">
-                        <span>Data de execução: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                        <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
-                        <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                     </div>
                     <div class="assinaturas">
                         <span>Assinatura do cliente</span>
@@ -530,28 +506,24 @@ $totalProdutos = 0; ?>
                         </div>
                     <?php else : ?>
                         <div id="imgLogo" class="align-middle">
-                            <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:140px;">
+                            <img src="<?= $emitente->url_logo ?>" class="img-fluid" style="width:120px;">
                         </div>
-                        <div style="padding-left: 10px; padding-right: 10px; margin-top: 3px;">
+                        <div class="emitente">
                             <span style="font-size: 16px;"><b><?= $emitente->nome ?></b></span></br>
                             <?php if ($emitente->cnpj != "00.000.000/0000-00") : ?>
                                 <span class="align-middle">CNPJ: <?= $emitente->cnpj ?></span></br>
                             <?php endif; ?>
                             <span class="align-middle">
-                                <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?><br>
-                                <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
+                                <?= $emitente->rua.', '.$emitente->numero.', '.$emitente->bairro ?> - <?= $emitente->cidade.' - '.$emitente->uf.' - '.$emitente->cep ?>
                             </span>
-                        </div>
-                        <div style="text-align: right; max-width: 230px; margin-top: 10px;">
-                            <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span></br>
-                            <span style="font-weight: bold;"><?= $emitente->email ?></span></br>
-                            <span style="word-break: break-word;">Responsável: <b><?= $result->nome ?></b></span>
+                            <span class="contato-item"><span class="contato-label">E-mail:</span> <?= $emitente->email ?></span>
+                            <span class="contato-item"><span class="contato-label">Telefone:</span> <?= $emitente->telefone ?></span>
                         </div>
                     <?php endif; ?>
                 </header>
                 <section>
                     <div class="title">
-                        ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                        OS #<?= numeroOS($result) ?>
                         <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                     </div>
                     <div class="subtitle">ANEXO(S)</div>
@@ -575,8 +547,10 @@ endforeach;
             </div>
         <?php endif; ?>
     </div>
-    <script type="text/javascript">
-        window.print();
-    </script>
+    <?php if (empty($export_pdf)) : ?>
+        <script type="text/javascript">
+            window.print();
+        </script>
+    <?php endif; ?>
 </body>
 </html>

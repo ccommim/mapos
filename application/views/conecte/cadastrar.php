@@ -23,6 +23,10 @@
 
 <body>
     <style>
+        body {
+            background: #f5f7fa;
+        }
+
         #imgSenha {
             width: 18px;
             cursor: pointer;
@@ -53,17 +57,25 @@
 
         .widget-title h5 {
             padding-bottom: 15px;
-            text-align-last: center;
-            font-size: 1.5em;
+            text-align: center;
+            font-size: 1.35em;
             font-weight: 500;
         }
 
-        
+        .widget-box {
+            margin: 24px auto;
+            max-width: 1100px;
+            width: calc(100% - 32px);
+        }
+
+        .client-form-note {
+            margin-bottom: 0;
+        }
 
         .widget-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            /* gap:20px; */
+            gap: 0;
         }
 
         @media (max-width: 480px) {
@@ -130,25 +142,31 @@
         }
     </style>
 
-    <div class="row-fluid" style="width: 100vw;height: 96%;display: grid;align-items: center;justify-content: center">
+    <div class="row-fluid" style="min-height: 96vh;display: grid;align-items: center;justify-content: center;padding: 16px 0;">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Cadastre-se no Sistema</h5>
-                 <?php if (isset($custom_error) && $custom_error != '') {
-                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                 } ?>
+                <h5>Cadastro do Cliente</h5>
             </div>
             <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                    <div class="span12" style="padding: 12px 12px 0 12px; grid-column: 1 / -1;">
+                        <?php if (isset($custom_error) && $custom_error != '') {
+                            echo '<div class="alert alert-danger client-form-note">' . $custom_error . '</div>';
+                        } else { ?>
+                            <div class="alert alert-info client-form-note">
+                                <strong>Preencha seus dados para concluir o cadastro.</strong> Os campos com asterisco são obrigatórios.
+                            </div>
+                        <?php } ?>
+                    </div>
                     <div class="control-group">
-                        <label for="nomeCliente" class="control-label"><span class="required"></span></label>
+                        <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
                             <input id="nomeCliente" type="text" placeholder="Nome*" name="nomeCliente" value="<?= set_value('nomeCliente') ?>" />
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label"><span class="required"></span></label>
+                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
                             <input id="documento" class="cpfcnpj" type="text" placeholder="CPF/CNPJ*" name="documento" value="<?= set_value('documento') ?>" />
                             <button style="position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
@@ -156,7 +174,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="telefone" class="control-label"><span class="required"></span></label>
+                        <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
                             <input id="telefone" type="text" placeholder="Telefone*" name="telefone" value="<?= set_value('telefone') ?>" />
                         </div>
@@ -170,14 +188,14 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="email" class="control-label"><span class="required"></span></label>
+                        <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
                             <input id="email" type="text" placeholder="Email*" name="email" value="<?= set_value('email') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="senha" class="control-label"><span class="required"></span></label>
+                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
                         <div class="controls">
                             <input id="senha" type="password" placeholder="Senha*" name="senha" value="<?= set_value('senha') ?>" />
                             <img id="imgSenha" src="<?= base_url() ?>assets/img/eye.svg" alt="">
@@ -185,21 +203,21 @@
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="cep" class="control-label"><span class="required"></span></label>
+                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
                             <input id="cep" type="text" placeholder="CEP*" name="cep" value="<?= set_value('cep') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="rua" class="control-label"><span class="required"></span></label>
+                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
                             <input id="rua" type="text" placeholder="Rua*" name="rua" value="<?= set_value('rua') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="numero" class="control-label"><span class="required"></span></label>
+                        <label for="numero" class="control-label">Número<span class="required">*</span></label>
                         <div class="controls">
                             <input id="numero" type="text" placeholder="Número*" name="numero" value="<?= set_value('numero') ?>" />
                         </div>
@@ -211,28 +229,28 @@
                         </div>
                     </div>
                     <div class="control-group" class="control-label">
-                        <label for="bairro" class="control-label"><span class="required"></span></label>
+                            <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
                         <div class="controls">
                             <input id="bairro" type="text" placeholder="Bairro*" name="bairro" value="<?= set_value('bairro') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="cidade" class="control-label"><span class="required"></span></label>
+                            <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
                         <div class="controls">
                             <input id="cidade" type="text" placeholder="Cidade*" name="cidade" value="<?= set_value('cidade') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="contato" class="control-label"></label>
+                            <label for="contato" class="control-label">Contato</label>
                         <div class="controls">
                             <input id="contato" type="text" placeholder="Contato*" name="contato" value="<?= set_value('contato') ?>" />
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="estado" class="control-label"><span class="required"></span></label>
+                            <label for="estado" class="control-label">Estado<span class="required">*</span></label>
                         <div class="controls">
                             <select id="estado" name="estado">
                                 <option value="">Selecione Seu Estado...</option>
@@ -241,7 +259,7 @@
                     </div>
                 </div>
 
-                <div class="control-group span12" style="background-color:transparent;border:none;padding: 10px;margin-left: 0;margin-bottom: 0;">
+                    <div class="control-group span12" style="background-color:transparent;border:none;padding: 10px;margin-left: 0;margin-bottom: 0;grid-column: 1 / -1;">
                     <div style="display:flex; justify-content: center; flex-direction: column; align-items: center;">
                         <img src="<?= base_url() ?>index.php/mine/captcha" alt="">
                         <div class="controls" style="margin-left: 0;">
@@ -250,9 +268,9 @@
                     </div>
                 </div>
 
-                <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-bottom: 0">
+                    <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-bottom: 0;grid-column: 1 / -1;">
                     <div class="span12">
-                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                            <div class="span6 offset3" style="display:flex;justify-content: center; gap: 10px; flex-wrap: wrap;">
                             <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
                             <a href="<?= base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-undo'></i></span><span class="button__text2">Voltar</span></a>
                         </div>
@@ -403,7 +421,7 @@
     <div class="row-fluid">
         <div id="footer" class="span12" style="padding: 10px">
             <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
-                <?= date('Y') ?> &copy; Ramon Silva - <?= $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+                <?= $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
             </a>
         </div>
     </div>
