@@ -62,10 +62,7 @@
                         <tr>
                             <th>N°</th>
                             <th>Cliente</th>
-                            <th class="ph1">Responsável</th>
                             <th>Data de Execução</th>
-                            <th class="ph2">Data Final</th>
-                            <th class="ph3">Venc. Garantia</th>
                             <th>Valor Total</th>
                             <th>Desconto</th>
                             <th>Valor com Desconto</th>
@@ -77,7 +74,7 @@
                     <tbody>
                         <?php if (!$results) {
                             echo '<tr>
-                            <td colspan="10">Nenhuma OS Cadastrada</td>
+                            <td colspan="9">Nenhuma OS Cadastrada</td>
                             </tr>';
                         }
 
@@ -89,12 +86,6 @@ foreach ($results as $r) {
     } else {
         $dataFinal = "";
     }
-    if ($this->input->get('pesquisa') === null && is_array(json_decode($configuration['os_status_list']))) {
-        if (in_array($r->status, json_decode($configuration['os_status_list'])) != true) {
-            continue;
-        }
-    }
-
     switch ($r->status) {
         case 'Aberto':
             $cor = '#00cd00';
@@ -152,10 +143,7 @@ foreach ($results as $r) {
     echo '<tr>';
     echo '<td>' . numeroOS($r) . '</td>';
     echo '<td class="cli1"><a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-        echo '<td class="ph1">' . $r->nome . '<br><small>' . ($r->nomes_tecnicos ?: 'Sem técnicos vinculados') . '</small></td>';
     echo '<td>' . $dataInicial . '</td>';
-    echo '<td class="ph2">' . $dataFinal . '</td>';
-    echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
     echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
     echo '<td>R$ ' . number_format(floatval($r->desconto), 2, ',', '.') . '</td>';
     echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
@@ -168,7 +156,6 @@ foreach ($results as $r) {
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
         echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
         echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
     }
     if ($editavel) {
         echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
