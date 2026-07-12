@@ -33,8 +33,8 @@
                     <tr>
                         <th>#</th>
                         <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Telefone</th>
+                        <th>Login</th>
+                        <th>Email</th>
                         <th>Nível</th>
                         <th>Situação</th>
                         <th>Validade</th>
@@ -51,8 +51,8 @@
                             <tr>
                                 <td><?= $r->idUsuarios ?></td>
                                 <td><?= $r->nome ?></td>
-                                <td><?= $r->cpf ?></td>
-                                <td><?= $r->telefone ?></td>
+                                <td><?= $r->cust_login ?></td>
+                                <td><?= $r->email ?></td>
                                 <td><?= $r->permissao ?></td>
                                 <?php
                                 $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';

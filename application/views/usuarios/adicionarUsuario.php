@@ -53,9 +53,18 @@
 
 
                     <div class="control-group">
-                        <label for="email" class="control-label">Email<span class="required">*</span></label>
+                        <label for="cust_login" class="control-label">Login</label>
                         <div class="controls">
-                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
+                            <input id="cust_login" type="text" name="cust_login" value="<?php echo set_value('cust_login'); ?>" placeholder="Opcional" />
+                            <span class="help-block">Preencha Login ou Email (pelo menos um).</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="email" class="control-label">Email</label>
+                        <div class="controls">
+                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" placeholder="Opcional" />
+                            <span class="help-block">Preencha Login ou Email (pelo menos um).</span>
                         </div>
                     </div>
 
@@ -175,9 +184,6 @@
                 telefone: {
                     required: true
                 },
-                email: {
-                    required: true
-                },
                 senha: {
                     required: true
                 },
@@ -211,9 +217,6 @@
                     required: 'Campo Requerido.'
                 },
                 telefone: {
-                    required: 'Campo Requerido.'
-                },
-                email: {
                     required: 'Campo Requerido.'
                 },
                 senha: {

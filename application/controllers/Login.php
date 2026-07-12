@@ -28,16 +28,26 @@ class Login extends CI_Controller
         header('Access-Control-Allow-Headers: Content-Type');
 
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
         if ($this->form_validation->run() == false) {
             $json = ['result' => false, 'message' => validation_errors()];
             echo json_encode($json);
         } else {
-            $email = $this->input->post('email');
+            // Compatibilidade: prioriza o novo campo de entrada "login" e aceita o legado "cust_login".
+            $login = trim((string) $this->input->post('login'));
+            if ($login === '') {
+                $login = trim((string) $this->input->post('cust_login'));
+            }
+
+            if ($login === '') {
+                $json = ['result' => false, 'message' => 'Insira seu login ou e-mail.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
+                echo json_encode($json);
+                exit();
+            }
+
             $password = $this->input->post('senha');
             $this->load->model('Mapos_model');
-            $user = $this->Mapos_model->check_credentials($email);
+            $user = $this->Mapos_model->check_credentials_by_login($login);
 
             if ($user) {
                 // Verificar se acesso está expirado
@@ -59,7 +69,7 @@ class Login extends CI_Controller
                     echo json_encode($json);
                 }
             } else {
-                $json = ['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
+                $json = ['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
                 echo json_encode($json);
             }
         }

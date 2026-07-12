@@ -50,6 +50,8 @@ class Usuarios extends MY_Controller
         if ($this->form_validation->run('usuarios') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">' . validation_errors() . '</div>' : false);
         } else {
+            $custLogin = trim((string) set_value('cust_login'));
+
             $data = [
                 'nome' => set_value('nome'),
                 'rg' => set_value('rg'),
@@ -60,6 +62,7 @@ class Usuarios extends MY_Controller
                 'bairro' => set_value('bairro'),
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
+                'cust_login' => ($custLogin === '' ? null : $custLogin),
                 'email' => set_value('email'),
                 'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
                 'telefone' => set_value('telefone'),
@@ -104,7 +107,8 @@ class Usuarios extends MY_Controller
         $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
         $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required');
         $this->form_validation->set_rules('estado', 'Estado', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
+        $this->form_validation->set_rules('cust_login', 'Login', 'trim|callback_check_login_or_email_required|callback_check_login_unique');
+        $this->form_validation->set_rules('email', 'Email', 'trim|callback_check_email_optional_unique');
         $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required');
         $this->form_validation->set_rules('situacao', 'Situação', 'trim|required');
         $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
@@ -118,6 +122,7 @@ class Usuarios extends MY_Controller
             }
 
             $senha = $this->input->post('senha');
+            $custLogin = trim((string) $this->input->post('cust_login'));
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -131,6 +136,7 @@ class Usuarios extends MY_Controller
                     'bairro' => $this->input->post('bairro'),
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
+                    'cust_login' => ($custLogin === '' ? null : $custLogin),
                     'email' => $this->input->post('email'),
                     'senha' => $senha,
                     'telefone' => $this->input->post('telefone'),
@@ -150,6 +156,7 @@ class Usuarios extends MY_Controller
                     'bairro' => $this->input->post('bairro'),
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
+                    'cust_login' => ($custLogin === '' ? null : $custLogin),
                     'email' => $this->input->post('email'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
@@ -185,5 +192,73 @@ class Usuarios extends MY_Controller
         log_info('Removeu um usuário. ID: ' . $id);
 
         redirect(site_url('usuarios/gerenciar/'));
+    }
+
+    public function check_login_unique($custLogin)
+    {
+        $custLogin = trim((string) $custLogin);
+        if ($custLogin === '') {
+            return true;
+        }
+
+        $idUsuario = (int) $this->input->post('idUsuarios');
+
+        $this->db->where('cust_login', $custLogin);
+        if ($idUsuario > 0) {
+            $this->db->where('idUsuarios !=', $idUsuario);
+        }
+
+        $exists = $this->db->get('usuarios')->num_rows() > 0;
+        if ($exists) {
+            $this->form_validation->set_message('check_login_unique', 'O campo {field} já está em uso.');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function check_login_or_email_required($custLogin)
+    {
+        $custLogin = trim((string) $custLogin);
+        $email = trim((string) $this->input->post('email'));
+
+        if ($custLogin === '' && $email === '') {
+            $this->form_validation->set_message('check_login_or_email_required', 'Informe pelo menos Login ou Email.');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function check_email_optional_unique($email)
+    {
+        $email = trim((string) $email);
+        if ($email === '') {
+            return true;
+        }
+
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->form_validation->set_message('check_email_optional_unique', 'O campo {field} deve conter um e-mail válido.');
+
+            return false;
+        }
+
+        $idUsuario = (int) $this->input->post('idUsuarios');
+
+        $this->db->where('email', $email);
+        if ($idUsuario > 0) {
+            $this->db->where('idUsuarios !=', $idUsuario);
+        }
+
+        $exists = $this->db->get('usuarios')->num_rows() > 0;
+        if ($exists) {
+            $this->form_validation->set_message('check_email_optional_unique', 'O campo {field} já está em uso.');
+
+            return false;
+        }
+
+        return true;
     }
 }

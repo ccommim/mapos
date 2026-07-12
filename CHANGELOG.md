@@ -23,10 +23,15 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Ajustado formulário de clientes para definir Estado em maiúsculo e padrão MG quando não informado.
 - Ajustado comportamento de digitação em cadastro/edição de cliente para aplicar maiúsculo (exceto e-mail).
 - Ajustado espaçamento/layout das telas de cliente (adicionar, editar e visualizar), incluindo compactação de campos e refinos no bloco de observações.
+- Alterado fluxo de autenticação para aceitar acesso com Login ou E-mail no mesmo campo da tela de login.
+- Ajustadas telas de usuários (configurações, adicionar e editar) para permitir Login e E-mail opcionais individualmente, exigindo ao menos um dos dois campos preenchido.
+- Ajustada listagem de usuários para exibir colunas de Login e E-mail e remover CPF e Telefone.
+- Padronizada persistência do campo `cust_login` no cadastro/edição de usuários.
 
 ### Fixed
 - Corrigida busca de CNPJ alfanumérico para não exibir erro de documento inválido em cenários suportados.
 - Corrigida exibição de observações da OS na aba de Ordens de Serviço para texto puro (sem tags HTML).
+- Corrigidas validações de usuários para garantir unicidade de Login/E-mail quando informados e bloquear cadastro sem ambos vazios.
 
 ## [4.53.2] - 2026-02-19
 ### Fixed

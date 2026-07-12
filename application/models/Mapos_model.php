@@ -443,6 +443,18 @@ class Mapos_model extends CI_Model
         return $this->db->get('usuarios')->row();
     }
 
+    public function check_credentials_by_login($login)
+    {
+        $this->db->group_start();
+        $this->db->where('cust_login', $login);
+        $this->db->or_where('email', $login);
+        $this->db->group_end();
+        $this->db->where('situacao', 1);
+        $this->db->limit(1);
+
+        return $this->db->get('usuarios')->row();
+    }
+
     /**
      * Salvar configurações do sistema
      *

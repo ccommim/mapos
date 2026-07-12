@@ -162,9 +162,14 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'cust_login',
+            'label' => 'Login',
+            'rules' => 'trim|callback_check_login_or_email_required|callback_check_login_unique',
+        ],
+        [
             'field' => 'email',
             'label' => 'Email',
-            'rules' => 'required|trim|valid_email|is_unique[usuarios.email]',
+            'rules' => 'trim|callback_check_email_optional_unique',
         ],
         [
             'field' => 'senha',

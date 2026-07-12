@@ -63,7 +63,7 @@
                 <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
                 <div class="input-field">
                   <label class="fas fa-user" for="nome"></label>
-                  <input id="email" name="email" type="text" placeholder="Email">
+                  <input id="login" name="login" type="text" placeholder="Login ou e-mail">
                 </div>
                 <div class="input-field">
                   <label class="fas fa-lock" for="senha"></label>
@@ -113,21 +113,19 @@
   <script src="<?= base_url() ?>assets/js/validate.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $('#email').focus();
+      $('#login').focus();
       $("#formLogin").validate({
         rules: {
-          email: {
-            required: true,
-            email: true
+          login: {
+            required: true
           },
           senha: {
             required: true
           }
         },
         messages: {
-          email: {
-            required: '',
-            email: 'Insira Email válido'
+          login: {
+            required: 'Insira seu login ou e-mail.'
           },
           senha: {
             required: 'Campos Requeridos.'
