@@ -4,6 +4,30 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.53.2.1] - 2026-07-12
+### Added
+- Adicionado campo de observações para cliente (`cust_observacoes`) com migration dedicada.
+- Adicionado campo de observações nas telas de adicionar, editar e visualizar cliente.
+- Adicionado tratamento de normalização para dados de cliente no backend (maiúsculo) preservando e-mail em minúsculo.
+- Adicionada validação de e-mail duplicado com comparação normalizada em minúsculo.
+
+### Changed
+- Alterado fluxo de clientes para persistir e exibir `cust_observacoes` no lugar do campo antigo de observações.
+- Alterada aba de Ordens de Serviço na visualização de cliente:
+    - removidas colunas Data Final e Defeito;
+    - adicionadas colunas Data da Execução, Nome do Serviço, Observação, Quantidade, Valor e Valor Total;
+    - ordenação por data de execução mais recente.
+- Alterado rótulo e ordem de colunas da aba de Ordens de Serviço para melhor leitura.
+- Ajustado comportamento da aba Vendas para permanecer no código, porém oculta na interface.
+- Removido botão de editar OS da aba de Ordens de Serviço, mantendo apenas visualização.
+- Ajustado formulário de clientes para definir Estado em maiúsculo e padrão MG quando não informado.
+- Ajustado comportamento de digitação em cadastro/edição de cliente para aplicar maiúsculo (exceto e-mail).
+- Ajustado espaçamento/layout das telas de cliente (adicionar, editar e visualizar), incluindo compactação de campos e refinos no bloco de observações.
+
+### Fixed
+- Corrigida busca de CNPJ alfanumérico para não exibir erro de documento inválido em cenários suportados.
+- Corrigida exibição de observações da OS na aba de Ordens de Serviço para texto puro (sem tags HTML).
+
 ## [4.53.2] - 2026-02-19
 ### Fixed
 - Ajuste para não ficar gerando logs de erro por conta da constante E_STRICT. [@cabralwms](https://github.com/cabralwms)
