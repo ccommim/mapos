@@ -10,10 +10,10 @@ $totalProdutos = 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap5.3.2.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/imprimir.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/imprimir.css?v=<?= @filemtime(FCPATH . 'assets/css/imprimir.css') ?>">
 </head>
 <body>
-    <div class="main-page">
+    <div class="main-page <?= !empty($control_2vias_ativo) ? 'duas-vias' : '' ?>">
         <div class="sub-page">
             <header>
                 <?php if ($emitente == null) : ?>
@@ -43,7 +43,7 @@ $totalProdutos = 0;
             </header>
             <section>
                 <div class="title">
-                    <?php if ($configuration['control_2vias']) : ?><span class="via">Via cliente</span><?php endif; ?>
+                    <?php if (!empty($control_2vias_ativo)) : ?><span class="via">Via cliente</span><?php endif; ?>
                     ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
                     <span class="emissao">Emissão: <?= date('d/m/Y H:i:s') ?></span>
                 </div>
@@ -54,7 +54,7 @@ $totalProdutos = 0;
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center">STATUS</th>
-                                    <th class="text-center">DATA INICIAL</th>
+                                    <th class="text-center">DATA DE EXECUÇÃO</th>
                                     <th class="text-center">DATA FINAL</th>
                                     <?php if ($result->garantia) : ?>
                                         <th class="text-center">GARANTIA</th>
@@ -254,7 +254,7 @@ $totalProdutos = 0;
             </section>
             <footer>
                 <div class="detalhes">
-                    <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
+                    <span>Data de execução: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
                     <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
                     <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                 </div>
@@ -265,7 +265,7 @@ $totalProdutos = 0;
             </footer>
         </div>
 
-        <?php if ($configuration['control_2vias']) : ?>
+        <?php if (!empty($control_2vias_ativo)) : ?>
             <div class="sub-page novaPagina">
                 <header>
                     <?php if ($emitente == null) : ?>
@@ -298,7 +298,7 @@ $totalProdutos = 0;
                         <!-- VIA EMPRESA  -->
                         <?php $totalServico = 0;
 $totalProdutos = 0; ?>
-                        <?php if ($configuration['control_2vias']) : ?><span class="via">Via Empresa</span><?php endif; ?>
+                        <?php if (!empty($control_2vias_ativo)) : ?><span class="via">Via Empresa</span><?php endif; ?>
                         ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
                         <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                     </div>
@@ -309,7 +309,7 @@ $totalProdutos = 0; ?>
                                 <thead>
                                     <tr class="table-secondary">
                                         <th class="text-center">STATUS</th>
-                                        <th class="text-center">DATA INICIAL</th>
+                                        <th class="text-center">DATA DE EXECUÇÃO</th>
                                         <th class="text-center">DATA FINAL</th>
                                         <?php if ($result->garantia) : ?>
                                             <th class="text-center">GARANTIA</th>
@@ -509,7 +509,7 @@ $totalProdutos = 0; ?>
                 </section>
                 <footer>
                     <div class="detalhes">
-                        <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
+                        <span>Data de execução: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
                         <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
                         <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                     </div>

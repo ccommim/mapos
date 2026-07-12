@@ -172,7 +172,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
+                    <a href="<?php echo base_url(); ?>index.php/os/nova" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>

@@ -27,8 +27,87 @@ body {
     z-index: 1;
 }
 
+.main-page.duas-vias {
+    width: 289mm;
+    height: 202mm;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2mm;
+    padding: 1mm 0;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform-origin: top left;
+    transform: translateX(202mm) rotate(90deg);
+    top: 4mm;
+    left: 4mm;
+}
+
+.main-page.duas-vias::before {
+    content: "";
+    position: absolute;
+    top: 2mm;
+    bottom: 2mm;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 1px dashed #8f8f8f;
+    z-index: 2;
+}
+
+.main-page.duas-vias .sub-page {
+    flex: 0 0 calc(50% - 1.5mm);
+    max-width: calc(50% - 1.5mm);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.main-page.duas-vias footer {
+    padding: 10px;
+    margin-top: auto;
+}
+
+.main-page.duas-vias footer .assinaturas {
+    justify-content: space-around;
+    gap: 0;
+    margin-left: 0;
+    width: 100%;
+    align-items: flex-end;
+    margin-top: 3mm;
+    transform: none;
+}
+
+.main-page.duas-vias footer .assinaturas span {
+    width: 40%;
+    min-height: 14mm;
+    padding-top: 1.5mm;
+    margin-top: 32px;
+    font-size: 11px;
+    line-height: 1.1;
+}
+
+.main-page.duas-vias footer .detalhes {
+    margin-bottom: 0;
+}
+
+.main-page.duas-vias footer .detalhes span {
+    padding-bottom: 0;
+}
+
+.main-page.duas-vias .novaPagina {
+    page-break-before: auto !important;
+    break-before: auto !important;
+}
+
 .novaPagina {
-    display: none;
+    display: block;
+}
+
+.main-page:not(.duas-vias) .novaPagina {
     page-break-before: always;
 }
 
@@ -198,13 +277,22 @@ footer .detalhes {
 footer .assinaturas {
     display: flex;
     justify-content: space-around;
+    align-items: flex-end;
 }
 
 footer .assinaturas span {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
     width: 40%;
+    min-height: 14mm;
+    padding-top: 1.5mm;
     text-align: center;
     border-top: 1px solid #000;
-    margin-top: 55px;
+    margin-top: 32px;
+    font-size: 11px;
+    line-height: 1.1;
 }
 
 footer .vendedor {
@@ -228,24 +316,27 @@ footer .vendedor {
 }
 
 @page {
-    size: auto;
-    margin: 0.5cm;
+    size: A4;
+    margin: 4mm;
 }
 
 @media print {
     html, body {
         width: 210mm;
-        height: 297mm;       
+        height: 297mm;
+        margin: 0;
+        padding: 0;
     }
     .main-page {
         margin: 0;
         border: initial;
         border-radius: initial;
-        width: initial;
+        width: 100%;
         min-height: initial;
+        padding: 0;
         box-shadow: initial;
         background: initial;
-        page-break-after: always;
+        page-break-after: auto;
     }
 
     .via{
@@ -256,7 +347,72 @@ footer .vendedor {
         display: block;
     }
 
-    .novaPagina {
-        display: block;
+    .main-page.duas-vias {
+        width: 289mm;
+        height: 202mm;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 2mm;
+        padding: 1mm 0;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        transform-origin: top left;
+        transform: translateX(202mm) rotate(90deg);
+        top: 4mm;
+        left: 4mm;
+        page-break-after: auto;
+        overflow: hidden;
     }
+
+    .main-page.duas-vias .sub-page {
+        flex: 0 0 calc(50% - 1.5mm);
+        max-width: calc(50% - 1.5mm);
+        margin-bottom: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .main-page.duas-vias footer {
+        padding: 10px;
+        margin-top: auto;
+    }
+
+    .main-page.duas-vias footer .assinaturas {
+        justify-content: space-around;
+        gap: 0;
+        margin-left: 0;
+        width: 100%;
+        align-items: flex-end;
+        margin-top: 3mm;
+        transform: none;
+    }
+
+    .main-page.duas-vias footer .assinaturas span {
+        width: 40%;
+        min-height: 14mm;
+        padding-top: 1.5mm;
+        margin-top: 32px;
+        font-size: 11px;
+        line-height: 1.1;
+    }
+
+    .main-page.duas-vias footer .detalhes {
+        margin-bottom: 0;
+    }
+
+    .main-page.duas-vias footer .detalhes span {
+        padding-bottom: 0;
+    }
+
+    .main-page.duas-vias .novaPagina {
+        page-break-before: auto !important;
+        break-before: auto !important;
+    }
+
 }

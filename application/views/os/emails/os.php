@@ -117,7 +117,7 @@ $totalProdutos = 0; ?>
                             </td>
                             <td style="text-align: right">
                                 OS #: <?= $result->idOs ?><br>
-                                Data Inicial: <?= date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
+                                Data de Execução: <?= date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
                                 Data Final: <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                             </td>
                         </tr>

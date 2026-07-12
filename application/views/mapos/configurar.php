@@ -360,7 +360,7 @@
                                 <label for="control_2vias" class="control-label">Controle de Impressão em 2 Vias</label>
                                 <div class="controls">
                                     <select name="control_2vias" id="control_2vias">
-                                        <option value="1">Ativar</option>
+                                        <option value="1" <?= ($configuration['control_2vias'] ?? '0') == '1' ? 'selected' : ''; ?>>Ativar</option>
                                         <option value="0" <?= $configuration['control_2vias'] == '0' ? 'selected' : ''; ?>>Desativar</option>
                                     </select>
                                     <span class="help-inline">Ativar ou desativar impressão de OS em 2 vias.</span>

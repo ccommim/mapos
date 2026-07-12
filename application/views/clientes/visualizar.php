@@ -314,5 +314,9 @@
         } ?>
         <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
           <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
+                        echo '<a title="Nova OS" class="button btn btn-mini btn-success" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/os/nova?cliente_id=' . $result->idClientes . '">
+<span class="button__icon"><i class="bx bx-file"></i></span> <span class="button__text2"> Nova OS</span></a>';
+        } ?>
     </div>
 </div>

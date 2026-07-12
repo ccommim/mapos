@@ -28,11 +28,18 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Ajustada listagem de usuários para exibir colunas de Login e E-mail e remover CPF e Telefone.
 - Padronizada persistência do campo `cust_login` no cadastro/edição de usuários.
 - Simplificada migration de usuários para apenas adicionar a coluna `cust_login` quando ausente (sem renomear coluna legada e sem preenchimento automático).
+- Unificado fluxo de criação de OS com nova entrada em `os/nova`, incluindo seleção rápida de cliente e criação direta a partir da tela de cliente.
+- Redirecionados atalhos principais de criação de OS (lista de OS e painel) para o fluxo unificado.
+- Simplificada barra de ações da visualização da OS para usar apenas botão único de impressão.
+- Reformulado layout de impressão em 2 vias para saída em uma única folha A4 com via cliente e via empresa no mesmo documento.
+- Ajustado posicionamento e legibilidade do rodapé de assinaturas na impressão em 2 vias, com guia pontilhada para corte.
 
 ### Fixed
 - Corrigida busca de CNPJ alfanumérico para não exibir erro de documento inválido em cenários suportados.
 - Corrigida exibição de observações da OS na aba de Ordens de Serviço para texto puro (sem tags HTML).
 - Corrigidas validações de usuários para garantir unicidade de Login/E-mail quando informados e bloquear cadastro sem ambos vazios.
+- Corrigido carregamento da logo na impressão da OS para respeitar `APP_BASEURL` do ambiente.
+- Corrigidas quebras e espaços excedentes na impressão da OS em 2 vias (evitando páginas extras e desalinhamentos no preview/print).
 
 ## [4.53.2] - 2026-02-19
 ### Fixed

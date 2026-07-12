@@ -18,7 +18,7 @@
         <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
                 <div class="span3">
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+                    <a href="<?php echo base_url(); ?>index.php/os/nova" class="button btn btn-mini btn-success" style="max-width: 160px">
                         <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Ordem de Serviço</span></a>
                 </div>
             <?php
@@ -44,7 +44,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="<?=$this->input->get('data')?>">
+                <input type="text" name="data" autocomplete="off" id="data" placeholder="Data de Execução" class="span6 datepicker" value="<?=$this->input->get('data')?>">
                 <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="<?=$this->input->get('data2')?>">
             </div>
             <div class="span1">
@@ -63,7 +63,7 @@
                             <th>N°</th>
                             <th>Cliente</th>
                             <th class="ph1">Responsável</th>
-                            <th>Data Inicial</th>
+                            <th>Data de Execução</th>
                             <th class="ph2">Data Final</th>
                             <th class="ph3">Venc. Garantia</th>
                             <th>Valor Total</th>
@@ -151,7 +151,7 @@ foreach ($results as $r) {
 
     echo '<tr>';
     echo '<td>' . $r->idOs . '</td>';
-    echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
+    echo '<td class="cli1"><a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
     echo '<td class="ph1">' . $r->nome . '</td>';
     echo '<td>' . $dataInicial . '</td>';
     echo '<td class="ph2">' . $dataFinal . '</td>';

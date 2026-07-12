@@ -10,22 +10,7 @@
                         </a>';
                     } ?>
 
-                    <div class="button-container">
-                        <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse"> <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span></a>
-                        <div class="cascading-buttons">
-                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
-                                <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Papel A4</span>
-                            </a>
-                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
-                                <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
-                            </a>
-                            <?php if ($result->garantias_id) { ?>
-                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->idOs; ?>">
-                                    <span class="button__icon"><i class="bx bx-paperclip"></i></span> <span class="button__text">Termo Garantia</span>
-                                </a>
-                            <?php } ?>
-                        </div>
-                    </div>
+                    <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"> <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span></a>
 
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                         $this->load->model('os_model');
@@ -135,13 +120,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                         </td>
 
                                         <td>
-                                            <b>DATA INICIAL: </b><br>
+                                            <b>DATA DE EXECUÇÃO: </b><br>
                                             <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
-                                        </td>
-
-                                        <td>
-                                            <b>DATA FINAL: </b><br>
-                                            <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
 
                                         <td>
@@ -149,17 +129,10 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                 <b>GARANTIA: </b><br><?php echo $result->garantia . ' dia(s)'; ?>
                                             <?php } ?>
                                         </td>
-
-                                        <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto'])): ?>
-                                            <td>
-                                                <b>VENC. DA GARANTIA:</b><br>
-                                                <?= dateInterval($result->dataFinal, $result->garantia); ?>
-                                            </td>
-                                        <?php endif; ?>
                                     </tr>
                                 <?php } ?>
 
-                                <?php if ($result->descricaoProduto != null) { ?>
+                                <?php if (false && $result->descricaoProduto != null) { ?>
                                     <tr>
                                         <td colspan="5">
                                             <b>DESCRIÇÃO: </b>
@@ -168,7 +141,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     </tr>
                                 <?php } ?>
 
-                                <?php if ($result->defeito != null) { ?>
+                                <?php if (false && $result->defeito != null) { ?>
                                     <tr>
                                         <td colspan="5">
                                             <b>DEFEITO APRESENTADO: </b>
@@ -186,7 +159,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     </tr>
                                 <?php } ?>
 
-                                <?php if ($result->laudoTecnico != null) { ?>
+                                <?php if (false && $result->laudoTecnico != null) { ?>
                                     <tr>
                                         <td colspan="5">
                                             <b>LAUDO TÉCNICO: </b>
