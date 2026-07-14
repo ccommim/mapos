@@ -2,16 +2,22 @@
     .cliente-view-layout.form-horizontal .control-group {
         border-bottom: 1px solid #ffffff;
         margin-bottom: 0;
+        display: flex;
+        align-items: center;
     }
 
     .cliente-view-layout.form-horizontal .controls {
-        margin-left: 20px;
+        margin-left: 0;
+        flex: 1;
         padding-bottom: 0;
     }
 
     .cliente-view-layout.form-horizontal .control-label {
         text-align: left;
         padding-top: 0;
+        width: 220px;
+        margin: 0;
+        line-height: 20px;
     }
 
     .cliente-view-layout input[readonly],
@@ -35,6 +41,7 @@
     .cliente-view-layout .observacoes-full .control-group {
         border-bottom: 0;
         margin: 0;
+        display: block;
     }
 
     .cliente-view-layout .observacoes-full .control-label {
@@ -58,6 +65,35 @@
         box-sizing: border-box;
         resize: vertical;
         margin-top: 0;
+    }
+
+    @media (max-width: 768px) {
+        .cliente-view-layout.form-horizontal .control-group {
+            display: block;
+        }
+
+        .cliente-view-layout.form-horizontal .control-label {
+            width: auto;
+            margin-bottom: 4px;
+        }
+
+        .cliente-view-layout.form-horizontal .controls {
+            width: 100%;
+        }
+
+        .cliente-view-layout input[readonly] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cliente-view-layout .observacoes-full {
+            margin-top: 0;
+            padding-right: 0;
+        }
+
+        .cliente-view-layout .observacoes-full textarea {
+            width: 100%;
+        }
     }
 </style>
 <div class="widget-box">
@@ -118,6 +154,20 @@
                     </div>
 
                     <div class="span6">
+                    <?php
+                        $partesEnderecoMaps = array_filter([
+                            trim((string) ($result->rua ?? '')),
+                            trim((string) ($result->numero ?? '')),
+                            trim((string) ($result->bairro ?? '')),
+                            trim((string) ($result->cidade ?? '')),
+                            trim((string) ($result->estado ?? '')),
+                            trim((string) ($result->cep ?? '')),
+                        ]);
+                        $enderecoMaps = implode(', ', $partesEnderecoMaps);
+                        $mapsUrl = $enderecoMaps !== ''
+                            ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($enderecoMaps)
+                            : '';
+                    ?>
                     <div class="control-group">
                         <label class="control-label">CEP</label>
                         <div class="controls">
@@ -158,6 +208,18 @@
                         <label class="control-label">Estado</label>
                         <div class="controls">
                             <input type="text" value="<?php echo htmlspecialchars($result->estado, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Mapa</label>
+                        <div class="controls">
+                            <?php if ($mapsUrl !== '') : ?>
+                                <a href="<?php echo htmlspecialchars($mapsUrl, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-mini btn-info">
+                                    Abrir no Google Maps
+                                </a>
+                            <?php else : ?>
+                                <span class="text-muted">Endereço incompleto para abrir no mapa.</span>
+                            <?php endif; ?>
                         </div>
                     </div>
                     </div>

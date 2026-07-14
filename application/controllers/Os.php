@@ -111,19 +111,15 @@ class Os extends MY_Controller
                 $dataInicial = explode('/', $dataInicial);
                 $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
 
-                if ($dataFinal) {
-                    $dataFinal = explode('/', $dataFinal);
-                    $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-                } else {
-                    $dataFinal = date('Y/m/d');
-                }
+                // Regra de negocio: data final sempre acompanha a data inicial.
+                $dataFinal = $dataInicial;
 
                 $termoGarantiaId = (! $termoGarantiaId == null || ! $termoGarantiaId == '')
                     ? $this->input->post('garantias_id')
                     : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
-                $dataFinal = date('Y/m/d');
+                $dataFinal = $dataInicial;
             }
 
             $data = [
@@ -329,15 +325,11 @@ class Os extends MY_Controller
                 $dataInicial = explode('/', $dataInicial);
                 $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
 
-                if (! empty($dataFinal)) {
-                    $dataFinal = explode('/', $dataFinal);
-                    $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-                } else {
-                    $dataFinal = ! empty($os->dataFinal) ? $os->dataFinal : $dataInicial;
-                }
+                // Regra de negocio: data final sempre acompanha a data inicial.
+                $dataFinal = $dataInicial;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
-                $dataFinal = ! empty($os->dataFinal) ? $os->dataFinal : $dataInicial;
+                $dataFinal = $dataInicial;
             }
 
             $data = [

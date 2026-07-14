@@ -36,6 +36,11 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Simplificada barra de ações da visualização da OS para usar apenas botão único de impressão.
 - Reformulado layout de impressão em 2 vias para saída em uma única folha A4 com via cliente e via empresa no mesmo documento.
 - Ajustado posicionamento e legibilidade do rodapé de assinaturas na impressão em 2 vias, com guia pontilhada para corte.
+- Ajustada Home para ocultar widgets/atalhos conforme personalização do painel, mantendo calendário em destaque.
+- Ajustada regra de data na OS para persistir `dataFinal` sempre igual a `dataInicial` na criação e edição.
+- Ajustado layout das telas de usuários (adicionar/editar) para duas colunas, com visual mais compacto e alinhamento refinado dos rótulos.
+- Ajustado layout das telas de clientes e usuários com alinhamento responsivo de rótulos/campos para melhor leitura em desktop e mobile.
+- Adicionado link "Abrir no Google Maps" na visualização de cliente a partir dos dados de endereço cadastrados.
 
 ### Fixed
 - Corrigida busca de CNPJ alfanumérico para não exibir erro de documento inválido em cenários suportados.

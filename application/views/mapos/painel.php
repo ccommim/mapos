@@ -24,7 +24,7 @@
 </div>
 
 <!-- Action boxes -->
-<ul class="cardBox">
+<ul class="cardBox" style="display:none;">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
             <a class="cardLink" href="<?= site_url('clientes') ?>">

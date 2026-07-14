@@ -39,16 +39,22 @@
     .form-horizontal .control-group {
         border-bottom: 1px solid #ffffff;
         margin-bottom: 0;
+        display: flex;
+        align-items: center;
     }
 
     .form-horizontal .controls {
-        margin-left: 12px;
+        margin-left: 0;
+        flex: 1;
         padding-bottom: 0;
     }
 
     .form-horizontal .control-label {
         text-align: left;
         padding-top: 0;
+        width: 220px;
+        margin: 0;
+        line-height: 20px;
     }
 
     .nopadding {
@@ -72,6 +78,7 @@
     .observacoes-full .control-group {
         border-bottom: 0;
         margin: 0;
+        display: block;
     }
 
     .observacoes-full .control-label {
@@ -118,8 +125,25 @@
             display: contents !important;
         }
 
+        .form-horizontal .control-group {
+            display: block;
+        }
+
         .form-horizontal .control-label {
-            margin-bottom: -6px;
+            width: auto;
+            margin-bottom: 4px;
+        }
+
+        .form-horizontal .controls {
+            width: 100%;
+        }
+
+        #formCliente input[type="text"],
+        #formCliente input[type="password"],
+        #formCliente select,
+        #formCliente textarea {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .btn-xs {
