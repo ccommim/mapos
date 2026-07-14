@@ -49,6 +49,10 @@ class Mapos_model extends CI_Model
 
     public function pesquisar($termo)
     {
+        $termo = trim((string) $termo);
+        $codigoOs = preg_replace('/\D+/', '', $termo);
+        $buscaNumericaEstrita = ($termo !== '' && ctype_digit($termo));
+
         $data = [];
         // buscando clientes
         $this->db->like('nomeCliente', $termo);
@@ -59,10 +63,39 @@ class Mapos_model extends CI_Model
         $data['clientes'] = $this->db->get('clientes')->result();
 
         // buscando os
-        $this->db->like('idOs', $termo);
-        $this->db->or_like('descricaoProduto', $termo);
-        $this->db->limit(15);
-        $data['os'] = $this->db->get('os')->result();
+        if ($buscaNumericaEstrita) {
+            $this->db->where('idOs', (int) $termo);
+            $this->db->limit(15);
+            $data['os'] = $this->db->get('os')->result();
+
+            if (empty($data['os'])) {
+                $this->db->group_start();
+                $this->db->like('descricaoProduto', $termo);
+                $this->db->or_like('defeito', $termo);
+                $this->db->or_like('idOs', $termo);
+
+                if ($codigoOs !== '') {
+                    $this->db->or_where('idOs', (int) $codigoOs);
+                    $this->db->or_like('idOs', $codigoOs);
+                }
+                $this->db->group_end();
+                $this->db->limit(15);
+                $data['os'] = $this->db->get('os')->result();
+            }
+        } else {
+            $this->db->group_start();
+            $this->db->like('descricaoProduto', $termo);
+            $this->db->or_like('defeito', $termo);
+            $this->db->or_like('idOs', $termo);
+
+            if ($codigoOs !== '') {
+                $this->db->or_where('idOs', (int) $codigoOs);
+                $this->db->or_like('idOs', $codigoOs);
+            }
+            $this->db->group_end();
+            $this->db->limit(15);
+            $data['os'] = $this->db->get('os')->result();
+        }
 
         // buscando produtos
         $this->db->like('codDeBarra', $termo);
@@ -133,6 +166,18 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aberto');
+        $this->db->limit(10);
+
+        return $this->db->get()->result();
+    }
+
+    public function getOsNaoFinalizadas()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status !=', 'Finalizado');
+        $this->db->order_by('os.idOs', 'DESC');
         $this->db->limit(10);
 
         return $this->db->get()->result();

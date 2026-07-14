@@ -570,7 +570,7 @@
     
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Aberto</h5>
+            <h5 class="cardHeader">Ordens de Serviços com Status diferente de Finalizado</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -649,7 +649,7 @@
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="5">Nenhuma OS em aberto.</td>
+                            <td colspan="5">Nenhuma OS com status diferente de Finalizado.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
@@ -658,7 +658,7 @@
     </div>
 
 
-    <div class="widget-box0 widbox-blak">
+    <div class="widget-box0 widbox-blak" style="display:none;">
         <div>
             <h5 class="cardHeader">Ordens de Serviços Aprovadas</h5>
         </div>
@@ -836,7 +836,7 @@
         </div>
     </div>
 
-    <div class="widget-box0 widbox-blak">
+    <div class="widget-box0 widbox-blak" style="display:none;">
         <div>
             <h5 class="cardHeader">Ordens de Serviços Em Andamento e Aguardando Peças</h5>
         </div>
@@ -923,7 +923,7 @@
         </div>
     </div>
 
-    <div class="widget-box0 widbox-blak">
+    <div class="widget-box0 widbox-blak" style="display:none;">
         <div>
             <h5 class="cardHeader">Status de Vendas</h5>
         </div>
@@ -1009,7 +1009,7 @@
         </div>
     </div>
 
-    <div class="widget-box0 widbox-blak">
+    <div class="widget-box0 widbox-blak" style="display:none;">
         <div>
             <h5 class="cardHeader">Últimos Lançamentos Pendentes</h5>
         </div>
@@ -1053,7 +1053,7 @@
         </div>
     </div>
 
-    <div class="widget-box0 widbox-blak">
+    <div class="widget-box0 widbox-blak" style="display:none;">
         <div>
             <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
         </div>

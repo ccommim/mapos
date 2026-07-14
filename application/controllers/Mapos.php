@@ -17,7 +17,7 @@ class Mapos extends MY_Controller
         $this->data['vendasstatus'] = $this->mapos_model->getVendasStatus($vstatus);
         $this->data['lancamentos'] = $this->mapos_model->getLancamentos();
         $this->data['ordens_orcamentos'] = $this->mapos_model->getOsOrcamentos();
-        $this->data['ordens_abertas'] = $this->mapos_model->getOsAbertas();
+        $this->data['ordens_abertas'] = $this->mapos_model->getOsNaoFinalizadas();
         $this->data['ordens_aprovadas'] = $this->mapos_model->getOsAprovadas();
         $this->data['ordens_finalizadas'] = $this->mapos_model->getOsFinalizadas();
         $this->data['ordens_aguardando'] = $this->mapos_model->getOsAguardandoPecas();
