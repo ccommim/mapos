@@ -7,7 +7,7 @@ if (! defined('BASEPATH')) {
 /**
  * The user name of the git hub user who owns the repo
  */
-$config['github_user'] = 'RamonSilva20';
+$config['github_user'] = 'ccommim';
 
 /**
  * The repo on GitHub we will be updating from
@@ -25,7 +25,7 @@ $config['github_branch'] = 'master';
  * NOTE: You should only need to set this initially it will be
  * automatically set by the library after subsequent updates.
  */
-$config['current_commit'] = 'd93b12025b1533a334cb79b34346fa79ecb9005b';
+$config['current_commit'] = '114978a';
 
 /**
  * A list of files or folders to never perform an update on.
